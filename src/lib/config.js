@@ -3,7 +3,7 @@ const { APP_PORT, APP_DB_HOST, APP_DB_PASSWORD, APP_DB_USER, APP_DB_NAME, APP_SE
 
 const config = {
     app: {
-        port: APP_PORT || 8001,
+        port: APP_PORT || process.env.PORT || 3000,
         secret: APP_SECRET,
     },
     db: {
