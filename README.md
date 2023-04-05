@@ -42,3 +42,7 @@ Ejemplo
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | dev           | inicializa el servidor en modo de desarrollo.                                                                                                                                   |
 | start         | Ejecuta el servidor en modo de producción.                                                                                                                                      |
+
+## Probar el servicio
+
+[https://api-rest-hacer-comun-production.up.railway.app](https://api-rest-hacer-comun-production.up.railway.app)
