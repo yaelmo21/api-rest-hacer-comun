@@ -43,6 +43,13 @@ Ejemplo
 | dev           | inicializa el servidor en modo de desarrollo.                                                                                                                                   |
 | start         | Ejecuta el servidor en modo de producción.                                                                                                                                      |
 
+## Documentación Swagger
+
+Para acceder a la documentación es necesario inicializar el servidor en modo de desarrollo o por medio del url de producción
+
+- local: **localhost:[port]/docs**
+- Producción: [https://api-rest-hacer-comun-production.up.railway.app/docs](https://api-rest-hacer-comun-production.up.railway.app/docs)
+
 ## Probar el servicio
 
 [https://api-rest-hacer-comun-production.up.railway.app](https://api-rest-hacer-comun-production.up.railway.app)
