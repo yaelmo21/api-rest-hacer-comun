@@ -21,6 +21,28 @@ router.get("/", (req, res) => {
 });
 
 
+
+/**
+ * @swagger
+ * /seed:
+ *   post:
+ *     description: Seed data for database
+ *     responses:
+ *       200:
+ *         description: Success Clean and Insert data.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
 router.post('/seed', async (req, res) => {
     try {
         const result = await seedCase.initData();
