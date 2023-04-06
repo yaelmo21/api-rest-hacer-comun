@@ -1,4 +1,4 @@
-const { User } = require('../../models');
+const { User, Product } = require('../../models');
 const { config, HTTPError } = require('../../lib');
 const seedData = require('../../seed');
 
@@ -8,13 +8,16 @@ const initData = async () => {
 
     // Limpiar base de datos
     const usersRemove = User.deleteMany({});
-    const promises = [usersRemove];
+    const productsRemove = Product.deleteMany({});
+    const promises = [usersRemove, productsRemove];
     await Promise.all(promises);
 
     // Insertar datos de prueba
     const usersData = seedData.users;
+    const productsData = seedData.products;
     const usersAdd = User.insertMany(usersData);
-    const promisesAdd = [usersAdd];
+    const productsAdd = Product.insertMany(productsData);
+    const promisesAdd = [usersAdd, productsAdd];
     await Promise.all(promisesAdd);
 
     return true;

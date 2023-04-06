@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.0",
     "method-override": "^3.0.0",
     "mongoose": "^7.0.3",
+    "mongoose-paginate-v2": "^1.7.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",
     "uppercamelcase": "^3.0.0"
