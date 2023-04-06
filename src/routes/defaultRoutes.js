@@ -42,16 +42,25 @@ router.get("/", (req, res) => {
  *           properties:
  *             message:
  *               type: string
+*       500:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
  */
 router.post('/seed', async (req, res) => {
     try {
-        const result = await seedCase.initData();
-        console.log(result)
+        await seedCase.initData();
         res.json({ message: "Seed Data complete" });
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
             return res.status(error.statusCode).json({ message: error.message });
         }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
     }
 })
 

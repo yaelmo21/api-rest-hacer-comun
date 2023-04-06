@@ -11,6 +11,7 @@ module.exports = class Server {
     static #_instance
     app;
     swaggerOptions = {
+        openapi: "3.1.0",
         definition: {
             info: {
                 title: 'Api Rest Hacer Común',
@@ -31,6 +32,9 @@ module.exports = class Server {
         const app = express();
         app.use(cors());
         app.use(express.json());
+        app.use(express.urlencoded({
+            extended: true
+        }));
         app.use(methodOverride());
         app.use(logErrors);
         app.use(errorHandler);
