@@ -1,12 +1,11 @@
-const bcrypt = require('bcrypt')
-const { HTTPError, jwt } = require('../../lib')
+const { HTTPError, jwt, cryptography } = require('../../lib')
 const { User } = require('../../models')
 
 const login = async (email, password) => {
     const userDb = await User.findOne({ email }).lean()
     if (!userDb)
         throw new HTTPError(404, 'User not found, please create account')
-    if (!bcrypt.compareSync(password, userDb.password))
+    if (!cryptography.verifyPassword(password, userDb.password))
         throw new HTTPError(401, 'Email or password is incorrect')
     const user = {
         firstName: userDb.firstName,
