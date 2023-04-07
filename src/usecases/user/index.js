@@ -1,18 +1,41 @@
 const { HTTPError, jwt, cryptography } = require('../../lib')
 const { User, Roles } = require('../../models')
 
-const getAll = async () => {
+const addUrl = (user, req = null) => {
+    if (!req) return user
+    const { protocol, headers, baseUrl } = req
+    const url = `${protocol}://${headers.host}${baseUrl}/${user._id}`
+    const result = { ...user._doc, url }
+    console.log(result)
+    return result
+}
+
+const getAll = async (req = null) => {
     const users = await User.find({}).exec()
     return users.map((user) => {
-        const { _id, firstName, lastName, email, role } = user
-        return { _id, firstName, lastName, email, role }
+        const { firstName, lastName, email, role, url } = addUrl(user, req)
+        return { firstName, lastName, email, role, url }
     })
 }
 
-const getById = async (id) => {
+const getById = async (id, req = null) => {
     const user = await User.findById(id).exec()
-    const { _id, firstName, lastName, email, role } = user
-    return { _id, firstName, lastName, email, role }
+    const { firstName, lastName, email, role, url } = addUrl(user, req)
+    return { firstName, lastName, email, role, url }
+}
+
+const update = async (id, data) => {
+    return await User.findByIdAndUpdate(id, data, { new: true }).exec()
+}
+
+const updatePersonalInfo = async (id, firstName, lastName, email) => {
+    const user = await update(id, { firstName, lastName, email })
+    return {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+    }
 }
 
 const login = async (email, password) => {

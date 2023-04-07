@@ -2,6 +2,7 @@ const router = require('express').Router()
 const { auth } = require('../middlewares')
 const { HTTPError } = require('../lib')
 const usersCases = require('../usecases/user')
+const { Roles } = require('../models')
 
 /**
  * @swagger
@@ -27,7 +28,7 @@ const usersCases = require('../usecases/user')
  */
 router.get('/', auth.authAdminHandler, async (req, res) => {
     try {
-        const users = await usersCases.getAll()
+        const users = await usersCases.getAll(req)
         res.status(200).json(users)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
@@ -48,7 +49,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
             throw new HTTPError(401, 'You are not authorized')
         }
 
-        const user = await usersCases.getById(id)
+        const user = await usersCases.getById(id, req)
         res.status(200).json(user)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
