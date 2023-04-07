@@ -16,13 +16,17 @@ const productSchema = new Schema({
     }],
     inStock: { type: Number, default: 0, required: true },
     price: { type: Number, default: 0, required: true },
-    sizes: [{
-        type: String,
-        enum: {
-            values: ['small', 'medium', 'large', 'extra large'],
-            message: 'Size is not valid'
-        }
-    }],
+    isActive: { type: Boolean, default: true },
+    sizes: {
+        type: [{
+            type: String,
+            enum: {
+                values: ['small', 'medium', 'large', 'extra large', 'unique'],
+                message: 'Size is not valid'
+            },
+        }],
+        default: ['unique']
+    },
     slug: {
         type: String,
         required: true,

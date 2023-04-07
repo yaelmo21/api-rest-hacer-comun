@@ -38,6 +38,7 @@ const initialData = {
             slug: 'jarro_de_barro_negro',
             inStock: 10,
             price: 300,
+            isActive: true,
             sizes: [
                 'small',
                 'medium',
@@ -58,6 +59,7 @@ const initialData = {
             slug: 'alebrijes',
             inStock: 20,
             price: 250,
+            isActive: true,
             sizes: [
                 'small',
                 'medium',
@@ -76,6 +78,7 @@ const initialData = {
             slug: 'pinata',
             inStock: 40,
             price: 350,
+            isActive: true,
             sizes: [
                 'small',
                 'medium',

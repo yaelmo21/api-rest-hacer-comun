@@ -2,8 +2,8 @@
 
 ## Instalaciones necesarias
 
-- [NodeJS 16+](https://nodejs.org/en)
-- [MongoDB](https://www.mongodb.com)
+-   [NodeJS 16+](https://nodejs.org/en)
+-   [MongoDB](https://www.mongodb.com)
 
 ## Instalación de dependencias
 
@@ -29,6 +29,7 @@ Las variables utilizadas son las siguientes:
 | APP_DB_HOST                 | Nombre de dominio o dirección ip del servidor de base de datos (Mongodb)                                                                                                      |
 | APP_DB_NAME                 | Nombre de la base de datos (Mongodb)                                                                                                                                          |
 | APP_SECRET                  | Clave o semilla para cifrar los JWT                                                                                                                                           |
+| CLOUDINARY_URL              | Crendenciales de [Cloudinary](https://cloudinary.com)                                                                                                                         |
 
 ## Comandos del servidor
 
@@ -47,8 +48,8 @@ Ejemplo
 
 Para acceder a la documentación es necesario inicializar el servidor en modo de desarrollo o por medio del url de producción
 
-- local: **localhost:[port]/docs**
-- Producción: [https://api-rest-hacer-comun-production.up.railway.app/docs](https://api-rest-hacer-comun-production.up.railway.app/docs)
+-   local: **localhost:[port]/docs**
+-   Producción: [https://api-rest-hacer-comun-production.up.railway.app/docs](https://api-rest-hacer-comun-production.up.railway.app/docs)
 
 ## Probar el servicio
 

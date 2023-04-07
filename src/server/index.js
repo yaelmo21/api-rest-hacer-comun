@@ -1,5 +1,7 @@
+const os = require('os');
 const express = require("express");
 const cors = require("cors");
+const fileUpload = require('express-fileupload');
 const methodOverride = require('method-override');
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
@@ -34,6 +36,10 @@ module.exports = class Server {
         app.use(express.json());
         app.use(express.urlencoded({
             extended: true
+        }));
+        app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: os.tmpdir()
         }));
         app.use(methodOverride());
         app.use(logErrors);

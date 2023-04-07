@@ -67,6 +67,21 @@ router.post('/', async (req, res) => {
     }
 })
 
+
+/**
+ * @swagger
+ * parameters:
+ *   login:
+ *     required:
+ *       - email
+ *       - password
+ *     properties:
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ */
+
 /**
  * @swagger
  * /users/auth:
@@ -76,11 +91,10 @@ router.post('/', async (req, res) => {
  *     description: Login User App
  *     parameters:
  *      - in: body
- *        name: email
- *        description: Email Account
- *      - in: body
- *        name: password
- *        description: Password account
+ *        name: login
+ *        schema:
+ *           type: object
+ *           $ref: '#/parameters/login'
  *     responses:
  *       200:
  *         description: Authenticated user.
@@ -131,7 +145,7 @@ router.post('/auth', async (req, res) => {
 /**
  * @swagger
  * /users/validate-token:
- *   post:
+ *   get:
  *     tags:
  *     - users
  *     description: Validate and renew token
