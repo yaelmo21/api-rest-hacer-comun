@@ -83,6 +83,8 @@ router.post('/auth', async (req, res) => {
  * @swagger
  * /users/validate-token:
  *   get:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *     - users
  *     description: Validate and renew token
