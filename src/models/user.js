@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 
+const Roles = {
+    admin: 'admin',
+    customer: 'client',
+    superUser: 'super-user',
+    seo: 'SEO',
+}
+
 const userSchema = new Schema(
     {
         firstName: { type: String, required: true, trim: true },
@@ -17,9 +24,9 @@ const userSchema = new Schema(
         role: {
             type: String,
             enum: {
-                values: ['admin', 'client', 'super-user', 'SEO'],
+                values: Object.values(Roles),
                 message: '{VALUE} no es un rol valido',
-                default: 'client',
+                default: Roles.customer,
                 required: true,
             },
         },
@@ -30,4 +37,4 @@ const userSchema = new Schema(
 )
 
 const User = mongoose.models.User || model('User', userSchema)
-module.exports = User
+module.exports = { User, Roles }

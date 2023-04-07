@@ -1,5 +1,5 @@
 const { HTTPError, jwt, cryptography } = require('../../lib')
-const { User } = require('../../models')
+const { User, Roles } = require('../../models')
 
 const login = async (email, password) => {
     const userDb = await User.findOne({ email }).lean()
@@ -40,7 +40,7 @@ const create = async (
     lastName,
     email,
     password,
-    role = 'client'
+    role = Roles.customer
 ) => {
     const hash = await cryptography.hashPassword(password)
     const user = new User({ firstName, lastName, email, password: hash, role })
