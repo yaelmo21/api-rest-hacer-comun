@@ -1,7 +1,7 @@
-const router = require("express").Router();
-const { auth } = require('../middlewares');
-const { HTTPError } = require('../lib');
-const usersCases = require('../usecases/user');
+const router = require('express').Router()
+const { auth } = require('../middlewares')
+const { HTTPError } = require('../lib')
+const usersCases = require('../usecases/user')
 
 /**
  * @swagger
@@ -13,7 +13,7 @@ const usersCases = require('../usecases/user');
  *     parameters:
  *      - in: body
  *        name: email
- *        description: Email Account 
+ *        description: Email Account
  *      - in: body
  *        name: password
  *        description: Password account
@@ -50,20 +50,19 @@ const usersCases = require('../usecases/user');
  *               type: string
  */
 router.post('/auth', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body
     try {
-        const result = await usersCases.login(email, password);
-        res.status(200).json(result);
+        const result = await usersCases.login(email, password)
+        res.status(200).json(result)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
-            return res.status(error.statusCode).json({ message: error.message });
+            return res.status(error.statusCode).json({ message: error.message })
         }
         return res.status(500).json({
-            message: 'Internal Server Error, contact Support'
-        });
+            message: 'Internal Server Error, contact Support',
+        })
     }
-});
-
+})
 
 /**
  * @swagger
@@ -113,17 +112,17 @@ router.post('/auth', async (req, res) => {
  */
 router.get('/validate-token', auth.authClientHandler, async (req, res) => {
     try {
-        const { userId } = req.params.token;
-        const result = await usersCases.renewTokenInfo(userId);
-        res.status(200).json(result);
+        const { userId } = req.params.token
+        const result = await usersCases.renewTokenInfo(userId)
+        res.status(200).json(result)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
-            return res.status(error.statusCode).json({ message: error.message });
+            return res.status(error.statusCode).json({ message: error.message })
         }
         return res.status(500).json({
-            message: 'Internal Server Error, contact Support'
-        });
+            message: 'Internal Server Error, contact Support',
+        })
     }
-});
+})
 
-module.exports = router;
+module.exports = router
