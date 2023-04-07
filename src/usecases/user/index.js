@@ -77,22 +77,38 @@ const create = async (
     lastName,
     email,
     password,
-    role = Roles.customer
+    role,
+    req = null
 ) => {
     const hash = await cryptography.hashPassword(password)
     const user = new User({ firstName, lastName, email, password: hash, role })
     const savedUser = await user.save()
+    const result = addUrl(savedUser, req)
     return {
-        firstName: savedUser.firstName,
-        lastName: savedUser.lastName,
-        email: savedUser.email,
+        firstName: result.firstName,
+        lastName: result.lastName,
+        email: result.email,
+        role: result.role,
+        url: result.url,
     }
 }
 
+const createCustomer = async (
+    firstName,
+    lastName,
+    email,
+    password,
+    req = null
+) => {
+    const { customer } = Roles
+    return await create(firstName, lastName, email, password, customer, req)
+}
+
 module.exports = {
+    createCustomer,
     getAll,
     getById,
     login,
     renewTokenInfo,
-    create,
+    updatePersonalInfo,
 }

@@ -145,11 +145,12 @@ router.post('/', async (req, res) => {
     const { firstName, lastName, email, password } = req.body
 
     try {
-        const user = await usersCases.create(
+        const user = await usersCases.createCustomer(
             firstName,
             lastName,
             email,
-            password
+            password,
+            req
         )
         const { token } = await usersCases.login(email, password)
         res.status(201).json({ ...user, token })
