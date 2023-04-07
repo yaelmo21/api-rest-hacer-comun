@@ -1,5 +1,5 @@
 const { verifyToken } = require('../lib').jwt
-const { User } = require('../models')
+const { User, Roles } = require('../models')
 
 const authClientHandler = async (req, res, next) => {
     const { authorization = '' } = req.headers
@@ -19,12 +19,12 @@ const authAdminHandler = async (req, res, next) => {
         if (!authorization) throw new Error('Token not found')
         const token = authorization.split(' ')[1]
         const userDataToken = verifyToken(token)
-        const userDb = await User.findById(userDataToken.userId)
+        const userDb = await User.findById(userDataToken.sub)
         if (!userDb)
             return res
                 .status(401)
                 .json({ ok: false, message: 'unauthorized user' })
-        if (userDataToken.role === 'admin' && userDb.role === 'admin') {
+        if (userDataToken.role === Roles.admin && userDb.role === Roles.admin) {
             req.params.token = userDataToken
             next()
             return

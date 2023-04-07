@@ -13,7 +13,7 @@ const login = async (email, password) => {
         role: userDb.role,
     }
     const token = jwt.createToken({
-        userId: userDb._id,
+        sub: userDb._id,
         role: userDb.role,
     })
 
@@ -21,7 +21,7 @@ const login = async (email, password) => {
 }
 
 const renewTokenInfo = async (userId) => {
-    const userDb = await User.findById(userId).lean()
+    const userDb = await getById(userId)
     if (!userDb) throw new HTTPError(404, 'User not found')
     const user = {
         firstName: userDb.firstName,
@@ -29,7 +29,7 @@ const renewTokenInfo = async (userId) => {
         role: userDb.role,
     }
     const token = jwt.createToken({
-        userId: userDb._id,
+        sub: userDb._id,
         role: userDb.role,
     })
     return { user, token }
