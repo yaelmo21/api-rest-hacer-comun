@@ -1,11 +1,12 @@
-const { APP_PORT, APP_DB_HOST, APP_DB_PASSWORD, APP_DB_USER, APP_DB_NAME, APP_SECRET, NODE_ENV } =
+const { APP_PORT, APP_DB_HOST, APP_DB_PASSWORD, APP_DB_USER, APP_DB_NAME, APP_SECRET, NODE_ENV, CLOUDINARY_URL } =
     process.env;
 
 const config = {
     app: {
         port: APP_PORT || process.env.PORT || 3000,
         secret: APP_SECRET,
-        node_env: NODE_ENV
+        node_env: NODE_ENV,
+        cloudinary_url: CLOUDINARY_URL,
     },
     db: {
         user: APP_DB_USER,
