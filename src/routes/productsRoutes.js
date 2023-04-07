@@ -53,6 +53,9 @@ const { HTTPError } = require('../lib');
  *     required:
  *       - title
  *       - description
+ *       - inStock
+ *       - price
+ *       - slug
  *     properties:
  *       title: 
  *         type: string

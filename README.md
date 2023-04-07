@@ -1,4 +1,4 @@
-# Rest Full Api Hacer Comnún
+# Rest Full Api Hacer Común
 
 ## Instalaciones necesarias
 

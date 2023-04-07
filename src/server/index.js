@@ -13,16 +13,26 @@ module.exports = class Server {
     static #_instance
     app;
     swaggerOptions = {
-        openapi: "3.1.0",
-        definition: {
+        swaggerDefinition: {
+            swagger: "2.0",
             info: {
                 title: 'Api Rest Hacer Común',
                 version: '1.0.0',
             },
+            host: '',
+            basePath: '/',
+            securityDefinitions: {
+                bearerAuth: {
+                    name: 'Authorization',
+                    type: 'apiKey',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                    in: 'header'
+                }
+            }
         },
-        host: '',
         apis: ['./src/routes/*.js'], // files containing annotations as above
-        basePath: '/'
+
     };
     constructor() {
         this.app = this.#initServerApp();
