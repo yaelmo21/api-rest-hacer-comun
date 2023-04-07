@@ -19,7 +19,7 @@ const authAdminHandler = async (req, res, next) => {
     const token = authorization.split(" ")[1];
     try {
         const userDataToken = verifyToken(token);
-        const userDb = await User.findById(userDataToken.userId);
+        const userDb = await User.findById(userDataToken.sub);
         if (!userDb) return res.status(401).json({ ok: false, message: 'unauthorized user' });
         if (userDataToken.role === 'admin' && userDb.role === 'admin') {
             req.params.token = userDataToken;

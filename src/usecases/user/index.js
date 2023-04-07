@@ -12,7 +12,7 @@ const login = async (email, password) => {
         role: userDb.role
     };
     const token = jwt.createToken({
-        userId: userDb._id,
+        sub: userDb._id,
         role: userDb.role
     });
 
@@ -31,7 +31,7 @@ const renewTokenInfo = async (userId) => {
         role: userDb.role
     };
     const token = jwt.createToken({
-        userId: userDb._id,
+        sub: userDb._id,
         role: userDb.role
     });
     return {

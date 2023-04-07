@@ -127,8 +127,8 @@ router.post('/auth', async (req, res) => {
  */
 router.get('/validate-token', auth.authClientHandler, async (req, res) => {
     try {
-        const { userId } = req.params.token;
-        const result = await usersCases.renewTokenInfo(userId);
+        const { sub } = req.params.token;
+        const result = await usersCases.renewTokenInfo(sub);
         res.status(200).json(result);
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
