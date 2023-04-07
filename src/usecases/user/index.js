@@ -2,7 +2,7 @@ const { HTTPError, jwt, cryptography } = require('../../lib')
 const { User, Roles } = require('../../models')
 
 const getAll = async () => {
-    const users = await User.find({})
+    const users = await User.find({}).exec()
     return users.map((user) => {
         const { _id, firstName, lastName, email, role } = user
         return { _id, firstName, lastName, email, role }
@@ -10,7 +10,8 @@ const getAll = async () => {
 }
 
 const getById = async (id) => {
-    const { _id, firstName, lastName, role } = await User.findById(id).lean()
+    const user = await User.findById(id).exec()
+    const { _id, firstName, lastName, email, role } = user
     return { _id, firstName, lastName, email, role }
 }
 

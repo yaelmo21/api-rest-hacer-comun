@@ -39,6 +39,27 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
     }
 })
 
+router.get('/:id', auth.authHandler, async (req, res) => {
+    try {
+        const { id } = req.params
+        const { sub, role } = req.params.token
+
+        if (role !== Roles.admin && sub != id) {
+            throw new HTTPError(401, 'You are not authorized')
+        }
+
+        const user = await usersCases.getById(id)
+        res.status(200).json(user)
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message })
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support',
+        })
+    }
+})
+
 /**
  * @swagger
  * /users:

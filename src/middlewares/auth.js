@@ -1,6 +1,12 @@
 const { verifyToken } = require('../lib').jwt
 const { User, Roles } = require('../models')
 
+const getToken = (req) => {
+    const token = req.headers.authorization
+    if (!token) throw new Error('Token not found')
+    return token.split(' ')[1]
+}
+
 const authClientHandler = async (req, res, next) => {
     const { authorization = '' } = req.headers
     const token = authorization.split(' ')[1]
@@ -14,10 +20,8 @@ const authClientHandler = async (req, res, next) => {
 }
 
 const authAdminHandler = async (req, res, next) => {
-    const { authorization } = req.headers
     try {
-        if (!authorization) throw new Error('Token not found')
-        const token = authorization.split(' ')[1]
+        const token = getToken(req)
         const userDataToken = verifyToken(token)
         const userDb = await User.findById(userDataToken.sub)
         if (!userDb)
@@ -36,4 +40,15 @@ const authAdminHandler = async (req, res, next) => {
     }
 }
 
-module.exports = { authClientHandler, authAdminHandler }
+const authHandler = async (req, res, next) => {
+    try {
+        const token = getToken(req)
+        req.params.token = verifyToken(token)
+    } catch (error) {
+        const { message } = error
+        return res.status(401).json({ ok: false, message })
+    }
+    next()
+}
+
+module.exports = { authClientHandler, authAdminHandler, authHandler }
