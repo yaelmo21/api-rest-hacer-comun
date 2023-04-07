@@ -15,8 +15,9 @@ const authClientHandler = async (req, res, next) => {
 
 const authAdminHandler = async (req, res, next) => {
     const { authorization } = req.headers
-    const token = authorization.split(' ')[1]
     try {
+        if (!authorization) throw new Error('Token not found')
+        const token = authorization.split(' ')[1]
         const userDataToken = verifyToken(token)
         const userDb = await User.findById(userDataToken.userId)
         if (!userDb)
@@ -28,7 +29,7 @@ const authAdminHandler = async (req, res, next) => {
             next()
             return
         }
-        return res.status(401).json({ ok: false, message: 'unauthorized user' })
+        throw new Error('unauthorized user')
     } catch (error) {
         const { message } = error
         return res.status(401).json({ ok: false, message })
