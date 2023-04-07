@@ -40,6 +40,44 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /users/:id:
+ *   get:
+ *     tags:
+ *     - users
+ *     description: Get data of one user
+ *     responses:
+ *       200:
+ *         description: User object
+ *         schema:
+ *           type: object
+ *           properties:
+ *             firstName:
+ *              type: string
+ *             lastName:
+ *              type: string
+ *             email:
+ *              type: string
+ *             role:
+ *              type: string
+ *             url:
+ *              type: string
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       500:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
 router.get('/:id', auth.authHandler, async (req, res) => {
     try {
         const { id } = req.params
