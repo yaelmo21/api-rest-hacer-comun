@@ -1,6 +1,19 @@
 const { HTTPError, jwt, cryptography } = require('../../lib')
 const { User, Roles } = require('../../models')
 
+const getAll = async () => {
+    const users = await User.find({})
+    return users.map((user) => {
+        const { _id, firstName, lastName, email, role } = user
+        return { _id, firstName, lastName, email, role }
+    })
+}
+
+const getById = async (id) => {
+    const { _id, firstName, lastName, role } = await User.findById(id).lean()
+    return { _id, firstName, lastName, email, role }
+}
+
 const login = async (email, password) => {
     const userDb = await User.findOne({ email }).lean()
     if (!userDb)
@@ -53,6 +66,8 @@ const create = async (
 }
 
 module.exports = {
+    getAll,
+    getById,
     login,
     renewTokenInfo,
     create,

@@ -6,11 +6,47 @@ const usersCases = require('../usecases/user')
 /**
  * @swagger
  * /users:
- *  post:
- *    tags:
- *      - users
- *    description: Create a new user with client role
- *    parameters:
+ *   get:
+ *     tags:
+ *       - user
+ *     description: Get all users
+ *     security:
+ *       - Bearer: []
+ *     responses:
+ *         200:
+ *          description: A list of users
+ *          schema:
+ *            type: Array
+ *         500:
+ *          description: Internal Server Error
+ *          schema:
+ *              type: object
+ *              properties:
+ *                  message:
+ *                      type: string
+ */
+router.get('/', auth.authAdminHandler, async (req, res) => {
+    try {
+        const users = await usersCases.getAll()
+        res.status(200).json(users)
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message })
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support',
+        })
+    }
+})
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     tags:
+ *     - users
+ *     description: Create a new user with client role
+ *     parameters:
  *      - in: body
  *        name: firstName
  *        description: First name of user
@@ -23,27 +59,27 @@ const usersCases = require('../usecases/user')
  *      - in: body
  *        name: password
  *        description: Password of user
- *      responses:
- *        201:
- *          description: User created
- *          schema:
- *            type: object
- *            properties:
- *              firstName:
- *                type: string
- *              lastName:
- *                type: string
- *              email:
- *                type: string
- *              token:
- *                type: string
- *        500:
- *          description: Internal Server Error
- *          schema:
- *            type: object
- *            properties:
- *              message:
- *                type: string
+ *     responses:
+ *      201:
+ *        description: User created
+ *        schema:
+ *          type: object
+ *          properties:
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            email:
+ *              type: string
+ *            token:
+ *              type: string
+ *      500:
+ *        description: Internal Server Error
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
  */
 router.post('/', async (req, res) => {
     const { firstName, lastName, email, password } = req.body
@@ -66,21 +102,6 @@ router.post('/', async (req, res) => {
         })
     }
 })
-
-
-/**
- * @swagger
- * parameters:
- *   login:
- *     required:
- *       - email
- *       - password
- *     properties:
- *       email:
- *         type: string
- *       password:
- *         type: string
- */
 
 /**
  * @swagger
