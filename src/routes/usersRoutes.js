@@ -5,6 +5,70 @@ const usersCases = require('../usecases/user')
 
 /**
  * @swagger
+ * /users:
+ *  post:
+ *    tags:
+ *      - users
+ *    description: Create a new user with client role
+ *    parameters:
+ *      - in: body
+ *        name: firstName
+ *        description: First name of user
+ *      - in: body
+ *        name: lastName
+ *        description: Last name of user
+ *      - in: body
+ *        name: email
+ *        description: E-mail of user
+ *      - in: body
+ *        name: password
+ *        description: Password of user
+ *      responses:
+ *        201:
+ *          description: User created
+ *          schema:
+ *            type: object
+ *            properties:
+ *              firstName:
+ *                type: string
+ *              lastName:
+ *                type: string
+ *              email:
+ *                type: string
+ *              token:
+ *                type: string
+ *        500:
+ *          description: Internal Server Error
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ */
+router.post('/', async (req, res) => {
+    const { firstName, lastName, email, password } = req.body
+
+    try {
+        const user = await usersCases.create(
+            firstName,
+            lastName,
+            email,
+            password
+        )
+        const { token } = await usersCases.login(email, password)
+        res.status(201).json({ ...user, token })
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message })
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support',
+        })
+    }
+})
+
+/**
+ * @swagger
  * /users/auth:
  *   post:
  *     tags:

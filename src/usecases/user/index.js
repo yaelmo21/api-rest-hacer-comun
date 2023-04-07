@@ -35,7 +35,25 @@ const renewTokenInfo = async (userId) => {
     return { user, token }
 }
 
+const create = async (
+    firstName,
+    lastName,
+    email,
+    password,
+    role = 'client'
+) => {
+    const hash = await cryptography.hashPassword(password)
+    const user = new User({ firstName, lastName, email, password: hash, role })
+    const savedUser = await user.save()
+    return {
+        firstName: savedUser.firstName,
+        lastName: savedUser.lastName,
+        email: savedUser.email,
+    }
+}
+
 module.exports = {
     login,
     renewTokenInfo,
+    create,
 }
