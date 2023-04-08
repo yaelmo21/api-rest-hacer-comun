@@ -41,6 +41,8 @@ const { HTTPError } = require('../lib');
  *       updatedAt: 
  *         type: string
  *         format: date-time
+ *       url: 
+ *         type: string
  *       __v: 
  *         type: number
  */

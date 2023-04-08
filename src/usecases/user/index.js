@@ -1,23 +1,33 @@
-const { HTTPError, jwt, cryptography } = require('../../lib')
-const { User, Roles } = require('../../models')
+const { HTTPError, jwt, cryptography } = require('../../lib');
+const { User, Roles } = require('../../models');
+const { config } = require('../../lib');
 
-const getAll = async () => {
-    const users = await User.find({}).select({
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        role: 1,
+const addUrl = (user) => {
+    const url = `${config.app.host}/users/${user._id}`;
+    const result = { ...user._doc, url }
+    return result
+}
+
+const getAll = async (page = 1, limit = 10, termSearch) => {
+    const query = termSearch ? { $text: { $search: termSearch } } : {};
+    const users = await User.paginate(query, {
+        page,
+        limit,
+        select: {
+            firstName: 1,
+            lastName: 1,
+            email: 1,
+            role: 1,
+        },
+        customLabels: {
+            docs: 'users',
+        }
     });
     return users;
 }
 
 const getById = async (id) => {
-    const user = await User.findById(id).select({
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        role: 1,
-    });
+    const user = await User.findById(id);
     return user;
 }
 
@@ -79,7 +89,7 @@ const create = async (
     const hash = await cryptography.hashPassword(password)
     const user = new User({ firstName, lastName, email, password: hash, role })
     const savedUser = await user.save()
-    const result = addUrl(savedUser, req)
+    const result = addUrl(savedUser);
     return {
         firstName: result.firstName,
         lastName: result.lastName,
