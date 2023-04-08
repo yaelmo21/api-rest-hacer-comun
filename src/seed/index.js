@@ -8,6 +8,7 @@ const initialData = {
             email: 'areyes@nostromo.com',
             password: bcrypt.hashSync('123456', 10),
             role: 'client',
+            isActive: true,
         },
         {
             firstName: 'Emilio',
@@ -15,6 +16,7 @@ const initialData = {
             email: 'eleon@nostromo.com',
             password: bcrypt.hashSync('123456', 10),
             role: 'client',
+            isActive: true,
         },
         {
             firstName: 'Yael',
@@ -22,6 +24,7 @@ const initialData = {
             email: 'yruiz@nostromo.com',
             password: bcrypt.hashSync('123456', 10),
             role: 'admin',
+            isActive: true,
         },
         {
             firstName: 'Alfredo',
@@ -29,6 +32,7 @@ const initialData = {
             email: 'aaltamirano@nostromo.com',
             password: bcrypt.hashSync('123456', 10),
             role: 'admin',
+            isActive: true,
         },
     ],
     products: [
