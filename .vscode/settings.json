@@ -1,3 +1,7 @@
 {
-    "conventionalCommits.scopes": ["userRoutes.js", "addressesRoutes.js"]
+    "conventionalCommits.scopes": [
+        "userRoutes.js",
+        "addressesRoutes.js",
+        "productsRoutes.js"
+    ]
 }

@@ -170,6 +170,8 @@ router.get('/', async (req, resp) => {
  *     tags:
  *     - products
  *     description: Create Product
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: body
  *         name: product
@@ -300,6 +302,8 @@ router.get('/:id', async (req, resp) => {
  *     tags:
  *     - products
  *     description: Get Product
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *      - in: path
  *        name: id
