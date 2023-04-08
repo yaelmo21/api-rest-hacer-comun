@@ -1,5 +1,5 @@
 const { HTTPError, config } = require('../../lib');
-const { Order, Product, ShippingAddress } = require('../../models');
+const { Order, Product, ShippingAddress, User, Roles } = require('../../models');
 
 const formatProducts = (products, orderItems) => {
     const orderItemsFormat = orderItems.map((item) => {
@@ -76,6 +76,23 @@ const createOrder = async (userId, orderItems, shippingAddressId) => {
 }
 
 
+const getOrders = async (userId, page = 1, limit = 10, termSearch) => {
+    const search = termSearch ? { $text: { $search: termSearch } } : {};
+    const userDb = await User.findById(userId).lean();
+    if (!userDb) throw new HTTPError(404, 'User not found');
+    const query = userDb.role !== Roles.admin ? { _id: userId, ...search } : search
+    const result = Order.paginate(query, {
+        page,
+        limit,
+        customLabels: {
+            docs: 'orders',
+        }
+    });
+    return result;
+}
+
+
 module.exports = {
-    createOrder
+    createOrder,
+    getOrders
 }

@@ -101,7 +101,7 @@ const { HTTPError } = require('../lib');
  *   get:
  *     tags:
  *     - products
- *     description: Login User App
+ *     description: Get All Products
  *     parameters:
  *      - in: query
  *        name: page
@@ -144,7 +144,7 @@ const { HTTPError } = require('../lib');
  *              type: string
  *              format: nullable
  *       500:
- *         description: unauthorized.
+ *         description: internal server error.
  *         schema:
  *           type: object
  *           properties:
@@ -207,7 +207,7 @@ router.get('/', async (req, resp) => {
  *             message:
  *               type: string
  *       500:
- *         description: unauthorized.
+ *         description: internal server error.
  *         schema:
  *           type: object
  *           properties:
@@ -270,7 +270,7 @@ router.post('/', auth.authAdminHandler, async (req, resp) => {
  *             message:
  *               type: string
  *       500:
- *         description: unauthorized.
+ *         description: internal server error.
  *         schema:
  *           type: object
  *           properties:
@@ -333,7 +333,7 @@ router.get('/:id', async (req, resp) => {
  *             message:
  *               type: string
  *       500:
- *         description: unauthorized.
+ *         description: internal server error.
  *         schema:
  *           type: object
  *           properties:
@@ -411,7 +411,7 @@ router.post('/:id/image', auth.authAdminHandler, async (req, resp) => {
  *             message:
  *               type: string
  *       500:
- *         description: unauthorized.
+ *         description: internal server error.
  *         schema:
  *           type: object
  *           properties:
@@ -475,7 +475,7 @@ router.put('/:id', auth.authAdminHandler, async (req, resp) => {
  *             message:
  *               type: string
  *       500:
- *         description: unauthorized.
+ *         description: internal server error.
  *         schema:
  *           type: object
  *           properties:

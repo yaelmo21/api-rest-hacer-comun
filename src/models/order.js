@@ -65,6 +65,8 @@ const orderSchema = new Schema({
     timestamps: true,
 });
 
+
+orderSchema.index({ 'orderItems.title': 'text', 'orderItems.description': 'text', 'orderItems.slug': 'text' });
 orderSchema.plugin(mongoosePaginate);
 orderSchema.methods.toJSON = function () {
     let order = this;

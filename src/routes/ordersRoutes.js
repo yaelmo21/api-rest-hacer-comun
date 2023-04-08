@@ -117,14 +117,6 @@ const { HTTPError } = require('../lib');
  *        type: string
  */
 
-
-
-
-
-
-
-
-
 /**
  * @swagger
  * /orders:
@@ -183,7 +175,6 @@ router.post('/', auth.authHandler, async (req, res) => {
         const order = await ordersCases.createOrder(sub, orderItems, shippingAddressId);
         res.status(201).json(order);
     } catch (error) {
-        console.log(error);
         if (HTTPError.isHttpError(error)) {
             return res.status(error.statusCode).json({ message: error.message });
         }
@@ -192,6 +183,89 @@ router.post('/', auth.authHandler, async (req, res) => {
         });
     }
 });
+
+
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     tags:
+ *     - orders
+ *     description: Get All Orders
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: query
+ *        name: page
+ *        description: current page list
+ *      - in: query
+ *        name: limit
+ *        description: max limit registers
+ *      - in: query
+ *        name: termSearch
+ *        description: Term for search products 
+ *     responses:
+ *       200:
+ *         description: Result products.
+ *         schema:
+ *           type: object
+ *           properties:
+ *            orders: 
+ *             type: array
+ *             items: 
+ *               type: object
+ *               $ref: '#/definitions/order'
+ *            totalDocs: 
+ *              type: number
+ *            limit: 
+ *              type: number
+ *            totalPages: 
+ *              type: number
+ *            page: 
+ *              type: number
+ *            pagingCounter: 
+ *              type: number
+ *            hasPrevPage: 
+ *              type: boolean
+ *            hasNextPage: 
+ *              type: boolean
+ *            prevPage: 
+ *              type: string
+ *              format: nullable
+ *            nextPage: 
+ *              type: string
+ *              format: nullable
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       500:
+ *         description: internal server error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.get('/', auth.authHandler, async (req, res) => {
+    try {
+        const { sub } = req.params.token;
+        const { page, limit, termSearch } = req.query;
+        const orders = await ordersCases.getOrders(sub, page, limit, termSearch)
+        res.status(200).json(orders);
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
+
 
 
 
