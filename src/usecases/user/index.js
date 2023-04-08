@@ -1,15 +1,15 @@
-const { HTTPError, jwt, cryptography } = require('../../lib');
-const { User, Roles } = require('../../models');
-const { config } = require('../../lib');
+const { HTTPError, jwt, cryptography } = require('../../lib')
+const { User, Roles } = require('../../models')
+const { config } = require('../../lib')
 
 const addUrl = (user) => {
-    const url = `${config.app.host}/users/${user._id}`;
+    const url = `${config.app.host}/users/${user._id}`
     const result = { ...user._doc, url }
     return result
 }
 
 const getAll = async (page = 1, limit = 10, termSearch) => {
-    const query = termSearch ? { $text: { $search: termSearch } } : {};
+    const query = termSearch ? { $text: { $search: termSearch } } : {}
     const users = await User.paginate(query, {
         page,
         limit,
@@ -21,14 +21,14 @@ const getAll = async (page = 1, limit = 10, termSearch) => {
         },
         customLabels: {
             docs: 'users',
-        }
-    });
-    return users;
+        },
+    })
+    return users
 }
 
 const getById = async (id) => {
-    const user = await User.findById(id);
-    return user;
+    const user = await User.findById(id)
+    return user
 }
 
 const update = async (id, data) => {
@@ -79,17 +79,11 @@ const renewTokenInfo = async (userId) => {
     return { user, token }
 }
 
-const create = async (
-    firstName,
-    lastName,
-    email,
-    password,
-    role,
-) => {
+const create = async (firstName, lastName, email, password, role) => {
     const hash = await cryptography.hashPassword(password)
     const user = new User({ firstName, lastName, email, password: hash, role })
     const savedUser = await user.save()
-    const result = addUrl(savedUser);
+    const result = addUrl(savedUser)
     return {
         firstName: result.firstName,
         lastName: result.lastName,
@@ -99,12 +93,7 @@ const create = async (
     }
 }
 
-const createCustomer = async (
-    firstName,
-    lastName,
-    email,
-    password,
-) => {
+const createCustomer = async (firstName, lastName, email, password) => {
     const { customer } = Roles
     return await create(firstName, lastName, email, password, customer)
 }
