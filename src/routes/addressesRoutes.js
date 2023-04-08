@@ -32,7 +32,48 @@ const { HTTPError } = require('../lib')
  *         type: string
  *       user: 
  *         type: string
+ *       createdAt: 
+ *         type: string
+ *       updatedAt: 
+ *         type: string
  */
+
+
+/**
+ * @swagger
+ * parameters:
+ *   address:
+ *     required:
+ *       - firstName
+ *       - lastName
+ *       - address
+ *       - address2
+ *       - zip
+ *       - city
+ *       - state
+ *       - country
+ *       - phone
+ *     properties:
+ *       firstName: 
+ *         type: string
+ *       lastName: 
+ *         type: string
+ *       address: 
+ *         type: string
+ *       address2: 
+ *         type: string
+ *       zip: 
+ *         type: string
+ *       city: 
+ *         type: string
+ *       state: 
+ *         type: string
+ *       country: 
+ *         type: string
+ *       phone: 
+ *         type: string
+ */
+
 
 
 /**
@@ -97,6 +138,58 @@ router.get('/', auth.authHandler, async (req, res) => {
         const result = await addressCases.getAll(sub, page, limit);
         res.status(200).send(result);
     } catch (error) {
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
+
+
+/**
+ * @swagger
+ * /addresses/:
+ *   post:
+ *     tags:
+ *     - addresses
+ *     description: Create address
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: body
+ *        name: ShippingAddress
+ *        description: ShippingAddress Create.
+ *        schema:
+ *          type: object
+ *          $ref: '#/parameters/address'
+ *     responses:
+ *       201:
+ *         description: Create success address.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             ok:
+ *               type: boolean
+ *             address: 
+ *               type: object
+ *               $ref: '#/definitions/address'
+ *       500:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.post('/', auth.authHandler, async (req, res) => {
+    const { sub } = req.params.token;
+    const address = req.body;
+    try {
+        const result = await addressCases.create(sub, address);
+        res.status(201).send({ ok: true, address: result });
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return resp.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({
             message: 'Internal Server Error, contact Support'
         });
