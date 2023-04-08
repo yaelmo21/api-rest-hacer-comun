@@ -2,12 +2,6 @@ const { HTTPError, jwt, cryptography } = require('../../lib')
 const { User, Roles } = require('../../models')
 const { config } = require('../../lib')
 
-const addUrl = (user) => {
-    const url = `${config.app.host}/users/${user._id}`
-    const result = { ...user._doc, url }
-    return result
-}
-
 const getAll = async (page = 1, limit = 10, termSearch) => {
     const query = termSearch ? { $text: { $search: termSearch } } : {}
     const users = await User.paginate(query, {
@@ -27,22 +21,22 @@ const getAll = async (page = 1, limit = 10, termSearch) => {
 }
 
 const getById = async (id) => {
-    const user = await User.findById(id)
-    return user
+    const select = { firstName: 1, lastName: 1, email: 1 }
+    return await User.findById(id, select)
 }
 
-const update = async (id, data) => {
-    return await User.findByIdAndUpdate(id, data, { new: true }).exec()
+const update = async (id, data, select) => {
+    try {
+        console.log(select)
+        return await User.findByIdAndUpdate(id, data, { new: true, select })
+    } catch (error) {
+        throw new HTTPError(400, error.message)
+    }
 }
 
 const updatePersonalInfo = async (id, firstName, lastName, email) => {
-    const user = await update(id, { firstName, lastName, email })
-    return {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-    }
+    data = { firstName, lastName, email }
+    return await update(id, data, Object.keys(data).join(' '))
 }
 
 const login = async (email, password) => {
@@ -80,16 +74,15 @@ const renewTokenInfo = async (userId) => {
 }
 
 const create = async (firstName, lastName, email, password, role) => {
-    const hash = await cryptography.hashPassword(password)
-    const user = new User({ firstName, lastName, email, password: hash, role })
-    const savedUser = await user.save()
-    const result = addUrl(savedUser)
-    return {
-        firstName: result.firstName,
-        lastName: result.lastName,
-        email: result.email,
-        role: result.role,
-        url: result.url,
+    try {
+        const hash = await cryptography.hashPassword(password)
+        const data = { firstName, lastName, email, password: hash, role }
+        const user = new User(data)
+        const savedUser = await user.save()
+        delete savedUser._doc.password
+        return savedUser
+    } catch (error) {
+        throw new HTTPError(400, error.message)
     }
 }
 

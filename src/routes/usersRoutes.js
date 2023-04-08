@@ -226,12 +226,50 @@ router.post('/', async (req, res) => {
             password
         )
         const { token } = await usersCases.login(email, password)
-        res.status(201).json({ ...user, token })
+        user._doc.token = token
+        res.status(201).json(user)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
-            return res.status(error.statusCode).json({ message: error.message })
+            return res
+                .status(error.statusCode)
+                .json({ ok: false, message: error.message })
         }
         return res.status(500).json({
+            ok: false,
+            message: 'Internal Server Error, contact Support',
+        })
+    }
+})
+
+router.patch('/:id', auth.authHandler, async (req, res) => {
+    const { body, params } = req
+    const { id, token } = params
+    const { role, sub } = token
+    const { firstName, lastName, email } = body
+
+    try {
+        if (role !== Roles.admin && sub !== id) {
+            throw new HTTPError(
+                401,
+                "You're not authorized to update this user"
+            )
+        }
+        const user = await usersCases.updatePersonalInfo(
+            id,
+            firstName,
+            lastName,
+            email
+        )
+
+        res.status(200).json(user)
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res
+                .status(error.statusCode)
+                .json({ ok: false, message: error.message })
+        }
+        return res.status(500).json({
+            ok: false,
             message: 'Internal Server Error, contact Support',
         })
     }
