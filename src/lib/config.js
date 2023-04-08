@@ -10,6 +10,7 @@ const {
     APP_HOST,
     APP_TAX_RATE,
     SENDGRID_API_KEY,
+    SENDGRID_SENDER,
 } = process.env
 
 const config = {
@@ -29,6 +30,7 @@ const config = {
     },
     sendgrid: {
         apiKey: SENDGRID_API_KEY,
+        sender: SENDGRID_SENDER,
     },
 }
 

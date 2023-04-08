@@ -33,6 +33,7 @@ Las variables utilizadas son las siguientes:
 | APP_TAX_RATE                | Tasa de impuesto de la orden                                                                                                                                                  |
 | CLOUDINARY_URL              | Crendenciales de [Cloudinary](https://cloudinary.com)                                                                                                                         |
 | SENDGRID_API_KEY            | Crendenciales de [SendGrid](https://sendgrid.com)                                                                                                                         |
+| SENDGRID_SENDER             | Sender verificado de [SendGrid](https://sendgrid.com)                                                                                                                         |
 
 ## Comandos del servidor
 
