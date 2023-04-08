@@ -429,7 +429,6 @@ router.put('/:id', auth.authAdminHandler, async (req, resp) => {
         });
     }
     catch (error) {
-        console.log(error);
         if (HTTPError.isHttpError(error)) {
             return resp.status(error.statusCode).json({ message: error.message });
         }
@@ -493,7 +492,6 @@ router.delete('/:id', auth.authAdminHandler, async (req, resp) => {
         });
     }
     catch (error) {
-        console.log(error);
         if (HTTPError.isHttpError(error)) {
             return resp.status(error.statusCode).json({ message: error.message });
         }

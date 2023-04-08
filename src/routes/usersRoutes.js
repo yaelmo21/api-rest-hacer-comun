@@ -133,7 +133,6 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
         const users = await usersCases.getAll(page, limit, termSearch);
         res.status(200).json(users)
     } catch (error) {
-        console.log(error);
         if (HTTPError.isHttpError(error)) {
             return res.status(error.statusCode).json({ message: error.message })
         }
@@ -233,7 +232,6 @@ router.post('/', async (req, res) => {
         const { token } = await usersCases.login(email, password)
         res.status(201).json({ ...user, token })
     } catch (error) {
-        console.log(error)
         if (HTTPError.isHttpError(error)) {
             return res.status(error.statusCode).json({ message: error.message })
         }

@@ -92,6 +92,48 @@ const initialData = {
                 'https://www.turismomexico.es/wp-content/uploads/2019/01/pinata_mexicana.jpg'
             ]
         }
+    ],
+    shippingAddresses: [
+        {
+            firstName: 'Dirk',
+            lastName: 'Gentiry',
+            address: 'PO Box 54915',
+            address2: 'Room 722',
+            zip: '132007',
+            city: 'El Guamo',
+            state: 'state-1',
+            phone: '290-151-7972'
+        },
+        {
+            firstName: 'Denney',
+            lastName: 'Fayter',
+            address: 'Room 1807',
+            address2: 'Suite 58',
+            zip: '111721',
+            city: 'Chita',
+            state: 'state-2',
+            phone: '252-465-5043'
+        },
+        {
+            firstName: 'Lyda',
+            lastName: 'Tonnesen',
+            address: 'Suite 51',
+            address2: 'Room 1216',
+            zip: '8608',
+            city: 'Santiago',
+            state: 'state-3',
+            phone: '739-672-1658'
+        },
+        {
+            firstName: 'Durante',
+            lastName: 'Sargint',
+            address: 'Apt 1420',
+            address2: 'Apt 1488',
+            zip: '7052',
+            city: 'Kushtia',
+            state: 'state-4',
+            phone: '951-846-2162'
+        }
     ]
 }
 

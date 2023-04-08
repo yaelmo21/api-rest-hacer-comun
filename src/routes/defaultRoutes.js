@@ -55,7 +55,6 @@ router.post('/seed', async (req, res) => {
         await seedCase.initData();
         res.json({ message: "Seed Data complete" });
     } catch (error) {
-        console.log(error);
         if (HTTPError.isHttpError(error)) {
             return res.status(error.statusCode).json({ message: error.message });
         }
