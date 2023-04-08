@@ -121,6 +121,20 @@ const { HTTPError } = require('../lib')
  *            nextPage: 
  *              type: string
  *              format: nullable
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       404:
+ *         description: not found.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
  *       500:
  *         description: unauthorized.
  *         schema:
@@ -170,6 +184,13 @@ router.get('/', auth.authHandler, async (req, res) => {
  *             address: 
  *               type: object
  *               $ref: '#/definitions/address'
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
  *       500:
  *         description: unauthorized.
  *         schema:
@@ -218,6 +239,20 @@ router.post('/', auth.authHandler, async (req, res) => {
  *             address: 
  *               type: object
  *               $ref: '#/definitions/address'
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       404:
+ *         description: not found.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
  *       500:
  *         description: unauthorized.
  *         schema:
@@ -248,7 +283,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *   put:
  *     tags:
  *     - addresses
- *     description: Create address
+ *     description: Update address
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -272,6 +307,20 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *             address: 
  *               type: object
  *               $ref: '#/definitions/address'
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       404:
+ *         description: not found.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
  *       500:
  *         description: unauthorized.
  *         schema:
@@ -299,5 +348,64 @@ router.put('/:id', auth.authHandler, async (req, res) => {
 
 
 
-
+/**
+ * @swagger
+ * /addresses/:id:
+ *   delete:
+ *     tags:
+ *     - addresses
+ *     description: Delete address
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID
+ *     responses:
+ *       201:
+ *         description: Success get address.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             ok:
+ *               type: boolean
+ *             message:
+ *               type: string
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       404:
+ *         description: not found.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       500:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.delete('/:id', auth.authHandler, async (req, res) => {
+    const { sub } = req.params.token;
+    const { id } = req.params;
+    try {
+        await addressCases.deleteAddress(id, sub);
+        res.status(200).send({ ok: true, message: 'Shipping Address has been deleted' });
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return resp.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
 module.exports = router;

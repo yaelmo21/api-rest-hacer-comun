@@ -57,11 +57,19 @@ const update = async (id, address, userId) => {
     }
 }
 
+const deleteAddress = async (id, userId) => {
+    if (!isValidObjectId(id)) throw new HTTPError(404, 'Shipping Address not Found');
+    const addressDb = await ShippingAddress.findOneAndUpdate({ _id: id, user: userId, isActive: true }, { isActive: false }).select('-user').lean();
+    if (!addressDb) throw new HTTPError(404, 'Shipping Address not Found');
+    return addressDb;
+}
+
 
 
 module.exports = {
     getAll,
     create,
     getById,
-    update
+    update,
+    deleteAddress
 }
