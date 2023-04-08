@@ -31,6 +31,7 @@ Las variables utilizadas son las siguientes:
 | APP_SECRET                  | Clave o semilla para cifrar los JWT                                                                                                                                           |
 | APP_HOST                    | Url del Api Rest                                                                                                                                                              |
 | CLOUDINARY_URL              | Crendenciales de [Cloudinary](https://cloudinary.com)                                                                                                                         |
+| SENDGRID_API_KEY            | Crendenciales de [SendGrid](https://sendgrid.com)                                                                                                                         |
 
 ## Comandos del servidor
 
