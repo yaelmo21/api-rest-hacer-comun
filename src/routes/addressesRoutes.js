@@ -30,8 +30,6 @@ const { HTTPError } = require('../lib')
  *         type: string
  *       phone: 
  *         type: string
- *       user: 
- *         type: string
  *       createdAt: 
  *         type: string
  *       updatedAt: 
@@ -186,6 +184,54 @@ router.post('/', auth.authHandler, async (req, res) => {
     try {
         const result = await addressCases.create(sub, address);
         res.status(201).send({ ok: true, address: result });
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return resp.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
+
+/**
+ * @swagger
+ * /addresses/:id:
+ *   get:
+ *     tags:
+ *     - addresses
+ *     description: Create address
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID
+ *     responses:
+ *       201:
+ *         description: Success get address.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             ok:
+ *               type: boolean
+ *             address: 
+ *               type: object
+ *               $ref: '#/definitions/address'
+ *       500:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.get('/:id', auth.authHandler, async (req, res) => {
+    const { sub } = req.params.token;
+    const { id } = req.params;
+    try {
+        const result = await addressCases.getById(id, sub);
+        res.status(200).send({ ok: true, address: result });
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
             return resp.status(error.statusCode).json({ message: error.message });
