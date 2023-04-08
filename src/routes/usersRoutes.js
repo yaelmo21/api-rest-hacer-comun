@@ -88,6 +88,16 @@ const { Roles } = require('../models');
  *     description: Get all users
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *      - in: query
+ *        name: page
+ *        description: current page list
+ *      - in: query
+ *        name: limit
+ *        description: max limit registers
+ *      - in: query
+ *        name: termSearch
+ *        description: Term for search users 
  *     responses:
  *         200:
  *          description: A list of users
@@ -149,6 +159,10 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
  *     tags:
  *     - users
  *     description: Get data of one user
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID or Slug 
  *     responses:
  *       200:
  *         description: User object
@@ -197,7 +211,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *   post:
  *     tags:
  *     - users
- *     description: Create a new user with client role
+ *     description: Create a new user with client role,
  *     parameters:
  *      - in: body
  *        name: user
