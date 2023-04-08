@@ -1,57 +1,53 @@
-const router = require('express').Router();
-const { auth } = require('../middlewares');
-const { HTTPError } = require('../lib');
-const usersCases = require('../usecases/user');
-const { Roles } = require('../models');
-
-
+const router = require('express').Router()
+const { auth } = require('../middlewares')
+const { HTTPError } = require('../lib')
+const usersCases = require('../usecases/user')
+const { Roles } = require('../models')
 
 /**
  * @swagger
  * definitions:
  *   user:
  *     properties:
- *       _id: 
+ *       _id:
  *         type: string
- *       firstName: 
+ *       firstName:
  *         type: string
- *       lastName: 
+ *       lastName:
  *         type: string
- *       email: 
+ *       email:
  *         type: string
- *       password: 
+ *       password:
  *         type: string
- *       role: 
+ *       role:
  *         type: string
- *       __v: 
+ *       __v:
  *         type: integer
  *         format: int32
- *       createdAt: 
+ *       createdAt:
  *         type: string
  *         format: date-time
- *       updatedAt: 
+ *       updatedAt:
  *         type: string
  *         format: date-time
- *       url: 
+ *       url:
  *         type: string
  *   userMin:
  *     properties:
- *       firstName: 
+ *       firstName:
  *         type: string
- *       lastName: 
+ *       lastName:
  *         type: string
- *       email: 
+ *       email:
  *         type: string
- *       password: 
+ *       password:
  *         type: string
- *       role: 
+ *       role:
  *         type: string
- *       url: 
+ *       url:
  *         type: string
- *     
+ *
  */
-
-
 
 /**
  * @swagger
@@ -67,15 +63,15 @@ const { Roles } = require('../models');
  *         type: string
  *   user:
  *     properties:
- *       firstName: 
+ *       firstName:
  *         type: string
- *       lastName: 
+ *       lastName:
  *         type: string
- *       email: 
+ *       email:
  *         type: string
- *       price: 
+ *       price:
  *         type: string
- *       password: 
+ *       password:
  *         type: string
  */
 
@@ -97,36 +93,36 @@ const { Roles } = require('../models');
  *        description: max limit registers
  *      - in: query
  *        name: termSearch
- *        description: Term for search users 
+ *        description: Term for search users
  *     responses:
  *         200:
  *          description: A list of users
  *          schema:
  *           type: object
  *           properties:
- *            users: 
+ *            users:
  *             type: array
- *             items: 
+ *             items:
  *               type: object
  *               $ref: '#/definitions/userMin'
- *            totalDocs: 
+ *            totalDocs:
  *              type: number
- *            limit: 
+ *            limit:
  *              type: number
- *            totalPages: 
+ *            totalPages:
  *              type: number
- *            page: 
+ *            page:
  *              type: number
- *            pagingCounter: 
+ *            pagingCounter:
  *              type: number
- *            hasPrevPage: 
+ *            hasPrevPage:
  *              type: boolean
- *            hasNextPage: 
+ *            hasNextPage:
  *              type: boolean
- *            prevPage: 
+ *            prevPage:
  *              type: string
  *              format: nullable
- *            nextPage: 
+ *            nextPage:
  *              type: string
  *              format: nullable
  *         500:
@@ -138,9 +134,9 @@ const { Roles } = require('../models');
  *                      type: string
  */
 router.get('/', auth.authAdminHandler, async (req, res) => {
-    const { page, limit, termSearch } = req.query;
+    const { page, limit, termSearch } = req.query
     try {
-        const users = await usersCases.getAll(page, limit, termSearch);
+        const users = await usersCases.getAll(page, limit, termSearch)
         res.status(200).json(users)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
@@ -162,7 +158,7 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
  *     parameters:
  *      - in: path
  *        name: id
- *        description: Mongo ID or Slug 
+ *        description: Mongo ID or Slug
  *     responses:
  *       200:
  *         description: User object
@@ -241,15 +237,58 @@ router.post('/', async (req, res) => {
             firstName,
             lastName,
             email,
-            password,
+            password
         )
         const { token } = await usersCases.login(email, password)
-        res.status(201).json({ ...user, token })
+        user._doc.token = token
+        res.status(201).json(user)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
-            return res.status(error.statusCode).json({ message: error.message })
+            return res
+                .status(error.statusCode)
+                .json({ ok: false, message: error.message })
         }
         return res.status(500).json({
+            ok: false,
+            message: 'Internal Server Error, contact Support',
+        })
+    }
+})
+
+router.patch('/:id', auth.authHandler, async (req, res) => {
+    const { body, params } = req
+    const { id, token } = params
+    const { role: userRole, sub } = token
+    const { firstName, lastName, email, role } = body
+    const { admin } = Roles
+
+    try {
+        if (userRole !== admin && sub !== id) {
+            const errMsg = "You're not authorized to update this user"
+            throw new HTTPError(401, errMsg)
+        }
+
+        if (role && userRole !== admin) {
+            throw new HTTPError(401, "You're not authorized to edit user roles")
+        }
+
+        const user = await usersCases.update(
+            id,
+            firstName,
+            lastName,
+            email,
+            role
+        )
+
+        res.status(200).json(user)
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res
+                .status(error.statusCode)
+                .json({ ok: false, message: error.message })
+        }
+        return res.status(500).json({
+            ok: false,
             message: 'Internal Server Error, contact Support',
         })
     }
