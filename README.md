@@ -30,6 +30,7 @@ Las variables utilizadas son las siguientes:
 | APP_DB_NAME                 | Nombre de la base de datos (Mongodb)                                                                                                                                          |
 | APP_SECRET                  | Clave o semilla para cifrar los JWT                                                                                                                                           |
 | APP_HOST                    | Url del Api Rest                                                                                                                                                              |
+| APP_TAX_RATE                | Tasa de impuesto de la orden                                                                                                                                                  |
 | CLOUDINARY_URL              | Crendenciales de [Cloudinary](https://cloudinary.com)                                                                                                                         |
 
 ## Comandos del servidor
