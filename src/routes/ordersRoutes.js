@@ -266,7 +266,45 @@ router.get('/', auth.authHandler, async (req, res) => {
     }
 });
 
-
+/**
+ * @swagger
+ * /orders/:id:
+ *   get:
+ *     tags:
+ *     - orders
+ *     description: Get Order
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID or Slug
+ *     responses:
+ *       201:
+ *         description: Success Response.
+ *         schema:
+ *           type: object
+ *           $ref: '#/definitions/order'
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       409:
+ *         description: conflict register.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       500:
+ *         description: internal server error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
 router.get('/:id', auth.authHandler, async (req, res) => {
     try {
         const { sub } = req.params.token;
