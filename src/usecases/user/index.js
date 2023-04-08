@@ -6,7 +6,6 @@ const addUrl = (user, req = null) => {
     const { protocol, headers, baseUrl } = req
     const url = `${protocol}://${headers.host}${baseUrl}/${user._id}`
     const result = { ...user._doc, url }
-    console.log(result)
     return result
 }
 

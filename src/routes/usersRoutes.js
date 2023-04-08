@@ -62,7 +62,6 @@ const { Roles } = require('../models');
 router.get('/', auth.authAdminHandler, async (req, res) => {
     try {
         const users = await usersCases.getAll(req)
-        console.log(JSON.stringify(users));
         res.status(200).json(users)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
