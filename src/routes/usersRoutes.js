@@ -1,23 +1,56 @@
-const router = require('express').Router()
-const { auth } = require('../middlewares')
-const { HTTPError } = require('../lib')
-const usersCases = require('../usecases/user')
-const { Roles } = require('../models')
+const router = require('express').Router();
+const { auth } = require('../middlewares');
+const { HTTPError } = require('../lib');
+const usersCases = require('../usecases/user');
+const { Roles } = require('../models');
+
+
+
+/**
+ * @swagger
+ * parameters:
+ *   login:
+ *     required:
+ *       - email
+ *       - password
+ *     properties:
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ *   user:
+ *     properties:
+ *       firstName: 
+ *         type: string
+ *       lastName: 
+ *         type: string
+ *       email: 
+ *         type: string
+ *       price: 
+ *         type: string
+ *       password: 
+ *         type: string
+ */
 
 /**
  * @swagger
  * /users:
  *   get:
  *     tags:
- *       - user
+ *       - users
  *     description: Get all users
  *     security:
- *       - Bearer: []
+ *       - bearerAuth: []
  *     responses:
  *         200:
  *          description: A list of users
  *          schema:
- *            type: Array
+ *            type: array
+ *            items: 
+ *             type: object
+ *             properties:
+ *                 url:
+ *                        type: string
  *         500:
  *          description: Internal Server Error
  *          schema:
@@ -108,17 +141,11 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *     description: Create a new user with client role
  *     parameters:
  *      - in: body
- *        name: firstName
- *        description: First name of user
- *      - in: body
- *        name: lastName
- *        description: Last name of user
- *      - in: body
- *        name: email
- *        description: E-mail of user
- *      - in: body
- *        name: password
- *        description: Password of user
+ *        name: user
+ *        description: User Create.
+ *        schema:
+ *          type: object
+ *          $ref: '#/parameters/user'
  *     responses:
  *      201:
  *        description: User created
