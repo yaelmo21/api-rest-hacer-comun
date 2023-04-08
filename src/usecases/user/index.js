@@ -11,6 +11,7 @@ const getAll = async (page = 1, limit = 10, termSearch) => {
             lastName: 1,
             email: 1,
             role: 1,
+            isActive: 1,
         },
         customLabels: {
             docs: 'users',
@@ -20,7 +21,7 @@ const getAll = async (page = 1, limit = 10, termSearch) => {
 }
 
 const getById = async (id) => {
-    const select = { firstName: 1, lastName: 1, email: 1 }
+    const select = { firstName: 1, lastName: 1, email: 1, isActive: 1 }
     return await User.findById(id, select)
 }
 
