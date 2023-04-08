@@ -1,57 +1,53 @@
-const router = require('express').Router();
-const { auth } = require('../middlewares');
-const { HTTPError } = require('../lib');
-const usersCases = require('../usecases/user');
-const { Roles } = require('../models');
-
-
+const router = require('express').Router()
+const { auth } = require('../middlewares')
+const { HTTPError } = require('../lib')
+const usersCases = require('../usecases/user')
+const { Roles } = require('../models')
 
 /**
  * @swagger
  * definitions:
  *   user:
  *     properties:
- *       _id: 
+ *       _id:
  *         type: string
- *       firstName: 
+ *       firstName:
  *         type: string
- *       lastName: 
+ *       lastName:
  *         type: string
- *       email: 
+ *       email:
  *         type: string
- *       password: 
+ *       password:
  *         type: string
- *       role: 
+ *       role:
  *         type: string
- *       __v: 
+ *       __v:
  *         type: integer
  *         format: int32
- *       createdAt: 
+ *       createdAt:
  *         type: string
  *         format: date-time
- *       updatedAt: 
+ *       updatedAt:
  *         type: string
  *         format: date-time
- *       url: 
+ *       url:
  *         type: string
  *   userMin:
  *     properties:
- *       firstName: 
+ *       firstName:
  *         type: string
- *       lastName: 
+ *       lastName:
  *         type: string
- *       email: 
+ *       email:
  *         type: string
- *       password: 
+ *       password:
  *         type: string
- *       role: 
+ *       role:
  *         type: string
- *       url: 
+ *       url:
  *         type: string
- *     
+ *
  */
-
-
 
 /**
  * @swagger
@@ -67,15 +63,15 @@ const { Roles } = require('../models');
  *         type: string
  *   user:
  *     properties:
- *       firstName: 
+ *       firstName:
  *         type: string
- *       lastName: 
+ *       lastName:
  *         type: string
- *       email: 
+ *       email:
  *         type: string
- *       price: 
+ *       price:
  *         type: string
- *       password: 
+ *       password:
  *         type: string
  */
 
@@ -94,29 +90,29 @@ const { Roles } = require('../models');
  *          schema:
  *           type: object
  *           properties:
- *            users: 
+ *            users:
  *             type: array
- *             items: 
+ *             items:
  *               type: object
  *               $ref: '#/definitions/userMin'
- *            totalDocs: 
+ *            totalDocs:
  *              type: number
- *            limit: 
+ *            limit:
  *              type: number
- *            totalPages: 
+ *            totalPages:
  *              type: number
- *            page: 
+ *            page:
  *              type: number
- *            pagingCounter: 
+ *            pagingCounter:
  *              type: number
- *            hasPrevPage: 
+ *            hasPrevPage:
  *              type: boolean
- *            hasNextPage: 
+ *            hasNextPage:
  *              type: boolean
- *            prevPage: 
+ *            prevPage:
  *              type: string
  *              format: nullable
- *            nextPage: 
+ *            nextPage:
  *              type: string
  *              format: nullable
  *         500:
@@ -128,9 +124,9 @@ const { Roles } = require('../models');
  *                      type: string
  */
 router.get('/', auth.authAdminHandler, async (req, res) => {
-    const { page, limit, termSearch } = req.query;
+    const { page, limit, termSearch } = req.query
     try {
-        const users = await usersCases.getAll(page, limit, termSearch);
+        const users = await usersCases.getAll(page, limit, termSearch)
         res.status(200).json(users)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
@@ -227,7 +223,7 @@ router.post('/', async (req, res) => {
             firstName,
             lastName,
             email,
-            password,
+            password
         )
         const { token } = await usersCases.login(email, password)
         res.status(201).json({ ...user, token })
