@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const { Schema, model } = mongoose;
+const { config } = require('../lib');
 
 const shippingAddressSchema = new Schema({
     firstName: { type: String, required: true },
@@ -24,6 +25,13 @@ const shippingAddressSchema = new Schema({
 
 
 shippingAddressSchema.plugin(mongoosePaginate);
+
+shippingAddressSchema.methods.toJSON = function () {
+    let address = this;
+    let addressObj = address.toObject();
+    addressObj.url = `${config.app.host}/addresses/${address._id}`;
+    return addressObj;
+}
 
 const ShippingAddress = mongoose.models.ShippingAddress || model('ShippingAddress', shippingAddressSchema);
 

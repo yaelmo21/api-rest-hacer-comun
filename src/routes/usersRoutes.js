@@ -61,7 +61,7 @@ const { Roles } = require('../models');
  */
 router.get('/', auth.authAdminHandler, async (req, res) => {
     try {
-        const users = await usersCases.getAll(req)
+        const users = await usersCases.getAll();
         res.status(200).json(users)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
@@ -177,7 +177,6 @@ router.post('/', async (req, res) => {
             lastName,
             email,
             password,
-            req
         )
         const { token } = await usersCases.login(email, password)
         res.status(201).json({ ...user, token })

@@ -36,7 +36,7 @@ const create = async (userId, address) => {
 
 const getById = async (id, userId) => {
     if (!isValidObjectId(id)) throw new HTTPError(404, 'Shipping Address not Found');
-    const addressDb = await ShippingAddress.findOne({ _id: id, user: userId, isActive: true }).select('-user').lean();
+    const addressDb = await ShippingAddress.findOne({ _id: id, user: userId, isActive: true }).select('-user');
     if (!addressDb) throw new HTTPError(404, 'Shipping Address not Found');
     return addressDb;
 }
@@ -48,7 +48,7 @@ const update = async (id, address, userId) => {
         if (!userDb) throw new HTTPError(404, 'User not found');
         delete address.user;
         delete address.isActive;
-        const addressDb = await ShippingAddress.findOneAndUpdate({ _id: id, user: userId }, address, { new: true }).lean();
+        const addressDb = await ShippingAddress.findOneAndUpdate({ _id: id, user: userId }, address, { new: true });
         if (!addressDb) throw new HTTPError(404, 'User not found');
         return addressDb;
     } catch (error) {
@@ -59,7 +59,7 @@ const update = async (id, address, userId) => {
 
 const deleteAddress = async (id, userId) => {
     if (!isValidObjectId(id)) throw new HTTPError(404, 'Shipping Address not Found');
-    const addressDb = await ShippingAddress.findOneAndUpdate({ _id: id, user: userId, isActive: true }, { isActive: false }).select('-user').lean();
+    const addressDb = await ShippingAddress.findOneAndUpdate({ _id: id, user: userId, isActive: true }, { isActive: false }).select('-user');
     if (!addressDb) throw new HTTPError(404, 'Shipping Address not Found');
     return addressDb;
 }

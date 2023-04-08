@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
+const { config } = require('../lib');
 
 const Roles = {
     admin: 'admin',
@@ -34,7 +35,16 @@ const userSchema = new Schema(
     {
         timestamps: true,
     }
-)
+);
+
+
+userSchema.methods.toJSON = function () {
+    let user = this;
+    let userObj = user.toObject();
+    userObj.url = `${config.app.host}/addresses/${user._id}`;
+    return userObj;
+}
+
 
 const User = mongoose.models.User || model('User', userSchema)
 module.exports = { User, Roles }

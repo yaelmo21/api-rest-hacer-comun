@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const { Schema, model } = mongoose;
+const { config } = require('../lib');
 
 const productSchema = new Schema({
     title: {
@@ -41,6 +42,12 @@ const productSchema = new Schema({
 
 productSchema.index({ title: 'text', description: 'text', tags: 'text' });
 productSchema.plugin(mongoosePaginate);
+productSchema.methods.toJSON = function () {
+    let product = this;
+    let productObj = product.toObject();
+    productObj.url = `${config.app.host}/products/${product._id}`;
+    return productObj;
+}
 
 const Product = mongoose.models.Product || model('Product', productSchema);
 
