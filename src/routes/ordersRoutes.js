@@ -115,6 +115,19 @@ const { HTTPError } = require('../lib');
  *              type: string
  *      shippingAddressId: 
  *        type: string
+ *   orderInfo:
+ *     properties:
+ *      state: 
+ *        type: string
+ *      comments: 
+ *        type: string
+ *      carrierInformation: 
+ *        type: object
+ *        properties: 
+ *          name: 
+ *            type: string
+ *          tracking: 
+ *            type: string
  */
 
 /**
@@ -290,8 +303,8 @@ router.get('/', auth.authHandler, async (req, res) => {
  *           properties:
  *             message:
  *               type: string
- *       409:
- *         description: conflict register.
+ *       404:
+ *         description: Not found.
  *         schema:
  *           type: object
  *           properties:
@@ -320,6 +333,72 @@ router.get('/:id', auth.authHandler, async (req, res) => {
         });
     }
 });
+
+
+/**
+ * @swagger
+ * /orders/:id:
+ *   put:
+ *     tags:
+ *     - orders
+ *     description: Get Order
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID or Slug
+ *      - in: body
+ *        name: orderInfo
+ *        description: Info update.
+ *        schema:
+ *          type: object
+ *          $ref: '#/parameters/orderInfo'
+ *     responses:
+ *       201:
+ *         description: Success Response.
+ *         schema:
+ *           type: object
+ *           $ref: '#/definitions/order'
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       404:
+ *         description: Not found.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       500:
+ *         description: internal server error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.put('/:id', auth.authAdminHandler, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { state, comments, carrierInformation } = req.body
+        if (!state && !carrierInformation) {
+            throw new HTTPError(400, 'Body is empty');
+        }
+        const order = await ordersCases.updateOrder(id, state, comments, carrierInformation)
+        res.status(200).json(order);
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
+
 
 
 

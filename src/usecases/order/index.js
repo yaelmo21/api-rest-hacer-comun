@@ -1,5 +1,5 @@
 const { HTTPError, config } = require('../../lib');
-const { Order, Product, ShippingAddress, User, Roles } = require('../../models');
+const { Order, Product, ShippingAddress, User, Roles, statusOrder } = require('../../models');
 
 const formatProducts = (products, orderItems) => {
     const orderItemsFormat = orderItems.map((item) => {
@@ -100,9 +100,32 @@ const getOrderById = async (userId, orderId) => {
     return order;
 }
 
+const updateOrder = async (orderId, state, comments = '', carrierInformation = {}) => {
+    if (state && !Object.values(statusOrder).includes(state)) {
+        throw new HTTPError(400, `${state} is not valid state`);
+    }
+    if (state === statusOrder.canceled && !comments) {
+        throw new HTTPError(400, 'It is necessary to send the comments of the cancellation');
+    }
+    const orderDb = await Order.findById(orderId);
+    if (!orderDb) throw new HTTPError(404, 'Order not found');
+    if (orderDb.state === statusOrder.create && !orderDb.isPaid) {
+        throw new HTTPError(409, 'unpaid order');
+    }
+    if (orderDb.state === statusOrder.send || orderDb.state === statusOrder.canceled) {
+        throw new HTTPError(409, `Order in wrong status, current status: ${orderDb.state}`);
+    }
+    orderDb.state = state;
+    orderDb.comments = comments;
+    orderDb.carrierInformation = carrierInformation;
+    await orderDb.save();
+    return orderDb;
+}
+
 
 module.exports = {
     createOrder,
     getOrders,
-    getOrderById
+    getOrderById,
+    updateOrder
 }
