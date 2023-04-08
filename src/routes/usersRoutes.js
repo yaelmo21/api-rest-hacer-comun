@@ -239,8 +239,6 @@ router.post('/', async (req, res) => {
             email,
             password
         )
-        const { token } = await usersCases.login(email, password)
-        user._doc.token = token
         res.status(201).json(user)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {

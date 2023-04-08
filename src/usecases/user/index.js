@@ -39,6 +39,7 @@ const login = async (email, password) => {
     const userDb = await User.findOne({ email }).lean()
     if (!userDb)
         throw new HTTPError(404, 'User not found, please create account')
+    if (!userDb.isActive) throw new HTTPError(401, 'User account is not active')
     if (!cryptography.verifyPassword(password, userDb.password))
         throw new HTTPError(401, 'Email or password is incorrect')
     const user = {
