@@ -1,6 +1,5 @@
 const { HTTPError, jwt, cryptography } = require('../../lib')
 const { User, Roles } = require('../../models')
-const { config } = require('../../lib')
 
 const getAll = async (page = 1, limit = 10, termSearch) => {
     const query = termSearch ? { $text: { $search: termSearch } } : {}
@@ -25,18 +24,14 @@ const getById = async (id) => {
     return await User.findById(id, select)
 }
 
-const update = async (id, data, select) => {
+const update = async (id, firstName, lastName, email, role) => {
+    const data = { firstName, lastName, email, role }
+    const select = Object.keys(data).join(' ')
     try {
-        console.log(select)
         return await User.findByIdAndUpdate(id, data, { new: true, select })
     } catch (error) {
         throw new HTTPError(400, error.message)
     }
-}
-
-const updatePersonalInfo = async (id, firstName, lastName, email) => {
-    data = { firstName, lastName, email }
-    return await update(id, data, Object.keys(data).join(' '))
 }
 
 const login = async (email, password) => {
@@ -97,5 +92,5 @@ module.exports = {
     getById,
     login,
     renewTokenInfo,
-    updatePersonalInfo,
+    update,
 }

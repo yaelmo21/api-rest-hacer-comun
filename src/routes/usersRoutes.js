@@ -93,7 +93,7 @@ const { Roles } = require('../models')
  *        description: max limit registers
  *      - in: query
  *        name: termSearch
- *        description: Term for search users 
+ *        description: Term for search users
  *     responses:
  *         200:
  *          description: A list of users
@@ -158,7 +158,7 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
  *     parameters:
  *      - in: path
  *        name: id
- *        description: Mongo ID or Slug 
+ *        description: Mongo ID or Slug
  *     responses:
  *       200:
  *         description: User object
@@ -258,21 +258,26 @@ router.post('/', async (req, res) => {
 router.patch('/:id', auth.authHandler, async (req, res) => {
     const { body, params } = req
     const { id, token } = params
-    const { role, sub } = token
-    const { firstName, lastName, email } = body
+    const { role: userRole, sub } = token
+    const { firstName, lastName, email, role } = body
+    const { admin } = Roles
 
     try {
-        if (role !== Roles.admin && sub !== id) {
-            throw new HTTPError(
-                401,
-                "You're not authorized to update this user"
-            )
+        if (userRole !== admin && sub !== id) {
+            const errMsg = "You're not authorized to update this user"
+            throw new HTTPError(401, errMsg)
         }
-        const user = await usersCases.updatePersonalInfo(
+
+        if (role && userRole !== admin) {
+            throw new HTTPError(401, "You're not authorized to edit user roles")
+        }
+
+        const user = await usersCases.update(
             id,
             firstName,
             lastName,
-            email
+            email,
+            role
         )
 
         res.status(200).json(user)
