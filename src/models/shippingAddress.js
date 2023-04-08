@@ -12,6 +12,7 @@ const shippingAddressSchema = new Schema({
     state: { type: String, required: true },
     country: { type: String, required: true, default: 'México' },
     phone: { type: String, required: true },
+    isActive: { type: Boolean, default: true },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',

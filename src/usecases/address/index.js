@@ -5,7 +5,8 @@ const { ShippingAddress, User } = require('../../models');
 
 const getAll = (userId, page = 1, limit = 10,) => {
     return ShippingAddress.paginate({
-        user: userId
+        user: userId,
+        isActive: true,
     }, {
         page,
         limit,
