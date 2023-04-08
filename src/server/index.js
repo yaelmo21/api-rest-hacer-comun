@@ -19,7 +19,7 @@ module.exports = class Server {
                 title: 'Api Rest Hacer Común',
                 version: '1.0.0',
             },
-            host: '',
+            host: config.app.host,
             basePath: '/',
             securityDefinitions: {
                 bearerAuth: {
