@@ -24,6 +24,8 @@ const { HTTPError } = require('../lib')
  *         type: string
  *       city: 
  *         type: string
+ *       state: 
+ *         type: string
  *       country: 
  *         type: string
  *       phone: 
@@ -100,5 +102,7 @@ router.get('/', auth.authHandler, async (req, res) => {
         });
     }
 });
+
+
 
 module.exports = router;
