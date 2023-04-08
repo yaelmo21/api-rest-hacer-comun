@@ -34,6 +34,8 @@ const { HTTPError } = require('../lib')
  *         type: string
  *       updatedAt: 
  *         type: string
+ *       url: 
+ *         type: string
  */
 
 

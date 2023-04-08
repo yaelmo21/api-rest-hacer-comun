@@ -1,4 +1,4 @@
-const { User, Product } = require('../../models');
+const { User, Product, ShippingAddress } = require('../../models');
 const { config, HTTPError } = require('../../lib');
 const seedData = require('../../seed');
 
@@ -9,7 +9,8 @@ const initData = async () => {
     // Limpiar base de datos
     const usersRemove = User.deleteMany({});
     const productsRemove = Product.deleteMany({});
-    const promises = [usersRemove, productsRemove];
+    const addressesRemove = ShippingAddress.deleteMany({});
+    const promises = [usersRemove, productsRemove, addressesRemove];
     await Promise.all(promises);
 
     // Insertar datos de prueba
@@ -18,7 +19,15 @@ const initData = async () => {
     const usersAdd = User.insertMany(usersData);
     const productsAdd = Product.insertMany(productsData);
     const promisesAdd = [usersAdd, productsAdd];
-    await Promise.all(promisesAdd);
+    const [users] = await Promise.all(promisesAdd);
+    const usersId = users.map((user) => user._id);
+    const addresses = seedData.shippingAddresses.map((address, index) => ({
+        ...address,
+        user: usersId[index]
+    }));
+
+    await ShippingAddress.insertMany(addresses);
+
 
     return true;
 }

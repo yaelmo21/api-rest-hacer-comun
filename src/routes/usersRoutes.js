@@ -8,6 +8,53 @@ const { Roles } = require('../models');
 
 /**
  * @swagger
+ * definitions:
+ *   user:
+ *     properties:
+ *       _id: 
+ *         type: string
+ *       firstName: 
+ *         type: string
+ *       lastName: 
+ *         type: string
+ *       email: 
+ *         type: string
+ *       password: 
+ *         type: string
+ *       role: 
+ *         type: string
+ *       __v: 
+ *         type: integer
+ *         format: int32
+ *       createdAt: 
+ *         type: string
+ *         format: date-time
+ *       updatedAt: 
+ *         type: string
+ *         format: date-time
+ *       url: 
+ *         type: string
+ *   userMin:
+ *     properties:
+ *       firstName: 
+ *         type: string
+ *       lastName: 
+ *         type: string
+ *       email: 
+ *         type: string
+ *       password: 
+ *         type: string
+ *       role: 
+ *         type: string
+ *       url: 
+ *         type: string
+ *     
+ */
+
+
+
+/**
+ * @swagger
  * parameters:
  *   login:
  *     required:
@@ -45,12 +92,33 @@ const { Roles } = require('../models');
  *         200:
  *          description: A list of users
  *          schema:
- *            type: array
- *            items: 
- *             type: object
- *             properties:
- *                 url:
- *                        type: string
+ *           type: object
+ *           properties:
+ *            users: 
+ *             type: array
+ *             items: 
+ *               type: object
+ *               $ref: '#/definitions/userMin'
+ *            totalDocs: 
+ *              type: number
+ *            limit: 
+ *              type: number
+ *            totalPages: 
+ *              type: number
+ *            page: 
+ *              type: number
+ *            pagingCounter: 
+ *              type: number
+ *            hasPrevPage: 
+ *              type: boolean
+ *            hasNextPage: 
+ *              type: boolean
+ *            prevPage: 
+ *              type: string
+ *              format: nullable
+ *            nextPage: 
+ *              type: string
+ *              format: nullable
  *         500:
  *          description: Internal Server Error
  *          schema:
@@ -60,8 +128,9 @@ const { Roles } = require('../models');
  *                      type: string
  */
 router.get('/', auth.authAdminHandler, async (req, res) => {
+    const { page, limit, termSearch } = req.query;
     try {
-        const users = await usersCases.getAll(req)
+        const users = await usersCases.getAll(page, limit, termSearch);
         res.status(200).json(users)
     } catch (error) {
         if (HTTPError.isHttpError(error)) {
@@ -85,17 +154,7 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
  *         description: User object
  *         schema:
  *           type: object
- *           properties:
- *             firstName:
- *              type: string
- *             lastName:
- *              type: string
- *             email:
- *              type: string
- *             role:
- *              type: string
- *             url:
- *              type: string
+ *           $ref: '#/definitions/user'
  *       401:
  *         description: unauthorized.
  *         schema:
@@ -151,15 +210,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *        description: User created
  *        schema:
  *          type: object
- *          properties:
- *            firstName:
- *              type: string
- *            lastName:
- *              type: string
- *            email:
- *              type: string
- *            token:
- *              type: string
+ *          $ref: '#/definitions/userMin'
  *      500:
  *        description: Internal Server Error
  *        schema:
@@ -177,7 +228,6 @@ router.post('/', async (req, res) => {
             lastName,
             email,
             password,
-            req
         )
         const { token } = await usersCases.login(email, password)
         res.status(201).json({ ...user, token })

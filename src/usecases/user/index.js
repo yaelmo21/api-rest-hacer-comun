@@ -1,26 +1,34 @@
-const { HTTPError, jwt, cryptography } = require('../../lib')
-const { User, Roles } = require('../../models')
+const { HTTPError, jwt, cryptography } = require('../../lib');
+const { User, Roles } = require('../../models');
+const { config } = require('../../lib');
 
-const addUrl = (user, req = null) => {
-    if (!req) return user
-    const { protocol, headers, baseUrl } = req
-    const url = `${protocol}://${headers.host}${baseUrl}/${user._id}`
+const addUrl = (user) => {
+    const url = `${config.app.host}/users/${user._id}`;
     const result = { ...user._doc, url }
     return result
 }
 
-const getAll = async (req = null) => {
-    const users = await User.find({}).lean();
-    return users.map((user) => {
-        const { firstName, lastName, email, role, url } = addUrl(user, req)
-        return { firstName, lastName, email, role, url }
-    })
+const getAll = async (page = 1, limit = 10, termSearch) => {
+    const query = termSearch ? { $text: { $search: termSearch } } : {};
+    const users = await User.paginate(query, {
+        page,
+        limit,
+        select: {
+            firstName: 1,
+            lastName: 1,
+            email: 1,
+            role: 1,
+        },
+        customLabels: {
+            docs: 'users',
+        }
+    });
+    return users;
 }
 
-const getById = async (id, req = null) => {
-    const user = await User.findById(id).lean();
-    const { firstName, lastName, email, role, url } = addUrl(user, req)
-    return { firstName, lastName, email, role, url }
+const getById = async (id) => {
+    const user = await User.findById(id);
+    return user;
 }
 
 const update = async (id, data) => {
@@ -77,12 +85,11 @@ const create = async (
     email,
     password,
     role,
-    req = null
 ) => {
     const hash = await cryptography.hashPassword(password)
     const user = new User({ firstName, lastName, email, password: hash, role })
     const savedUser = await user.save()
-    const result = addUrl(savedUser, req)
+    const result = addUrl(savedUser);
     return {
         firstName: result.firstName,
         lastName: result.lastName,
@@ -97,10 +104,9 @@ const createCustomer = async (
     lastName,
     email,
     password,
-    req = null
 ) => {
     const { customer } = Roles
-    return await create(firstName, lastName, email, password, customer, req)
+    return await create(firstName, lastName, email, password, customer)
 }
 
 module.exports = {
