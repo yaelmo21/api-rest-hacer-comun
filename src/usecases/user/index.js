@@ -11,7 +11,7 @@ const addUrl = (user, req = null) => {
 }
 
 const getAll = async (req = null) => {
-    const users = await User.find({}).exec()
+    const users = await User.find({}).lean();
     return users.map((user) => {
         const { firstName, lastName, email, role, url } = addUrl(user, req)
         return { firstName, lastName, email, role, url }
@@ -19,7 +19,7 @@ const getAll = async (req = null) => {
 }
 
 const getById = async (id, req = null) => {
-    const user = await User.findById(id).exec()
+    const user = await User.findById(id).lean();
     const { firstName, lastName, email, role, url } = addUrl(user, req)
     return { firstName, lastName, email, role, url }
 }

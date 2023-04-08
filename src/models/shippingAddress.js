@@ -9,13 +9,18 @@ const shippingAddressSchema = new Schema({
     address2: { type: String },
     zip: { type: String, required: true },
     city: { type: String, required: true },
-    country: { type: String, required: true, default: 'mexico' },
+    country: { type: String, required: true, default: 'México' },
     phone: { type: String, required: true },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 }, {
     timestamps: true
 });
 
-shippingAddressSchema.index({ title: 'text', description: 'text', tags: 'text' });
+
 shippingAddressSchema.plugin(mongoosePaginate);
 
 const ShippingAddress = mongoose.models.ShippingAddress || model('ShippingAddress', shippingAddressSchema);
