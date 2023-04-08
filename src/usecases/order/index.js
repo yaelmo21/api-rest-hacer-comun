@@ -91,8 +91,18 @@ const getOrders = async (userId, page = 1, limit = 10, termSearch) => {
     return result;
 }
 
+const getOrderById = async (userId, orderId) => {
+    const userDb = await User.findById(userId).lean();
+    if (!userDb) throw new HTTPError(404, 'User not found');
+    const query = userDb.role !== Roles.admin ? { _id: orderId, user: userId } : { _id: orderId };
+    const order = await Order.findOne(query);
+    if (!order) throw new HTTPError(404, 'Order not found');
+    return order;
+}
+
 
 module.exports = {
     createOrder,
-    getOrders
+    getOrders,
+    getOrderById
 }

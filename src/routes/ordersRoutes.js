@@ -267,6 +267,23 @@ router.get('/', auth.authHandler, async (req, res) => {
 });
 
 
+router.get('/:id', auth.authHandler, async (req, res) => {
+    try {
+        const { sub } = req.params.token;
+        const { id } = req.params;
+        const order = await ordersCases.getOrderById(sub, id);
+        res.status(200).json(order);
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
+
+
 
 
 module.exports = router;
