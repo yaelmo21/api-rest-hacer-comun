@@ -242,6 +242,62 @@ router.get('/:id', auth.authHandler, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /addresses/:id:
+ *   put:
+ *     tags:
+ *     - addresses
+ *     description: Create address
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID
+ *      - in: body
+ *        name: ShippingAddress
+ *        description: ShippingAddress update.
+ *        schema:
+ *          type: object
+ *          $ref: '#/parameters/address'
+ *     responses:
+ *       201:
+ *         description: Create success address.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             ok:
+ *               type: boolean
+ *             address: 
+ *               type: object
+ *               $ref: '#/definitions/address'
+ *       500:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.put('/:id', auth.authHandler, async (req, res) => {
+    const { sub } = req.params.token;
+    const { id } = req.params;
+    const address = req.body;
+    try {
+        const result = await addressCases.update(id, address, sub);
+        res.status(200).send({ ok: true, address: result });
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return resp.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+});
+
+
 
 
 module.exports = router;
