@@ -29,7 +29,7 @@ const formatProducts = (products, orderItems) => {
 
 const sendEmailStateOrder = async (user, orderId, state, carrierInformation, comments) => {
     // TODO Add Url order front
-    const { firstNam, email } = user;
+    const { firstName, email } = user;
     if (state === statusOrder.preparing) {
         const subject = 'Estamos preparando tu orden';
         const textMsg = `Hola ${firstName},
