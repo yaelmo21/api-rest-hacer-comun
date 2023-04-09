@@ -8,8 +8,10 @@ const {
     NODE_ENV,
     CLOUDINARY_URL,
     APP_HOST,
-    APP_TAX_RATE
-} = process.env;
+    APP_TAX_RATE,
+    SENDGRID_API_KEY,
+    SENDGRID_SENDER,
+} = process.env
 
 const config = {
     app: {
@@ -24,8 +26,12 @@ const config = {
         user: APP_DB_USER,
         password: APP_DB_PASSWORD,
         host: APP_DB_HOST,
-        name: APP_DB_NAME
+        name: APP_DB_NAME,
     },
-};
+    sendgrid: {
+        apiKey: SENDGRID_API_KEY,
+        sender: SENDGRID_SENDER,
+    },
+}
 
 module.exports = config
