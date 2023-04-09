@@ -66,6 +66,7 @@ const { HTTPError } = require('../lib');
  *       images: 
  *         type: array
  *         items: 
+ *           type: string  
  *       inStock: 
  *         type: number
  *       price: 
@@ -374,6 +375,8 @@ router.post('/:id/image', auth.authAdminHandler, async (req, resp) => {
  *   put:
  *     tags:
  *     - products
+ *     security:
+ *       - bearerAuth: []
  *     description: Create Product
  *     parameters:
  *      - in: path
@@ -445,6 +448,8 @@ router.put('/:id', auth.authAdminHandler, async (req, resp) => {
  *   delete:
  *     tags:
  *     - products
+ *     security:
+ *       - bearerAuth: []
  *     description: Create Product
  *     parameters:
  *      - in: path

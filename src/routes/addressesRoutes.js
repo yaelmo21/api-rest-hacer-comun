@@ -98,7 +98,7 @@ const { HTTPError } = require('../lib')
  *         schema:
  *           type: object
  *           properties:
- *            products: 
+ *            addresses: 
  *             type: array
  *             items: 
  *               type: object
