@@ -113,6 +113,8 @@ const { HTTPError } = require('../lib');
  *              type: number
  *            size: 
  *              type: string
+ *            color: 
+ *              type: string
  *      shippingAddressId: 
  *        type: string
  *   orderInfo:
