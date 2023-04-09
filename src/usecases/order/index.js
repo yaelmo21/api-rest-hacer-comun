@@ -1,4 +1,4 @@
-const { HTTPError, config } = require('../../lib');
+const { HTTPError, config, mail } = require('../../lib');
 const { Order, Product, ShippingAddress, User, Roles, statusOrder } = require('../../models');
 
 const formatProducts = (products, orderItems) => {
@@ -28,6 +28,8 @@ const formatProducts = (products, orderItems) => {
 
 
 const createOrder = async (userId, orderItems, shippingAddressId) => {
+    const userDb = await User.findById(userId).lean();
+    if (!userDb) throw new HTTPError(404, 'User not found');
     const productsIds = orderItems.map(({ _id }) => _id);
     const productSearch = Product.find({ _id: { $in: productsIds } }).select({
         _id: 1,
@@ -72,6 +74,25 @@ const createOrder = async (userId, orderItems, shippingAddressId) => {
     };
     const order = new Order(newOrder);
     await order.save();
+    const { email, firstName } = userDb;
+    // TODO: replace url for order url front
+    const url = 'http'
+    const emailOrderText = `Hola ${firstName},
+    Gracias por tu pedido. 
+    
+    Continua el proceso de pago con el siguiente link: ${url}.
+    El total de tu compra es de $${total} MXN.
+
+    Una vez procesado el pago, tu solicitud será revisada contra disponibilidad de inventario, 
+    de ser confirmada recibirás un correo electrónico con más detalles.
+    `;
+    const emailOrderHtml = `<p>Hola ${firstName},</p>
+    <p>Continua el proceso de pago con el siguiente link: <strong><a href="${url}">aquí</a></strong></p>
+    <p>El total de tu compra es de <strong>$${total} MXN.</strong></p>
+    <p>Una vez procesado el pago, tu solicitud será revisada contra disponibilidad de inventario, 
+    de ser confirmada recibirás un correo electrónico con más detalles.</p>
+    `;
+    await mail.send(email, 'Información sobre tu orden', emailOrderText, emailOrderHtml);
     return order;
 }
 
