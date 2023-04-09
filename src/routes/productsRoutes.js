@@ -27,6 +27,10 @@ const { HTTPError } = require('../lib');
  *         type: array
  *         items: 
  *           type: string
+ *       colors: 
+ *         type: array
+ *         items: 
+ *           type: string
  *       slug: 
  *         type: string
  *       tags: 
@@ -74,6 +78,10 @@ const { HTTPError } = require('../lib');
  *       isActive: 
  *         type: boolean
  *       sizes: 
+ *         type: array
+ *         items: 
+ *           type: string
+ *       colors: 
  *         type: array
  *         items: 
  *           type: string
