@@ -415,4 +415,20 @@ router.get('/validate-token', auth.authClientHandler, async (req, res) => {
     }
 })
 
+router.get('/activate/:code', async (req, res) => {
+    try {
+        const { code } = req.params
+        await usersCases.activate(code)
+        const message = 'User activated successfully!'
+        res.status(202).json({ ok: true, message })
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message })
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support',
+        })
+    }
+})
+
 module.exports = router

@@ -1,3 +1,4 @@
+const { randomUUID } = require('crypto')
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 const mongoosePaginate = require('mongoose-paginate-v2')
@@ -36,12 +37,22 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        activationCode: {
+            type: Schema.Types.UUID,
+            unique: true,
+            default: randomUUID(),
+        },
     },
     {
         timestamps: true,
     }
 )
-userSchema.index({ firstName: 'text', lastName: 'text', email: 'text' })
+userSchema.index({
+    firstName: 'text',
+    lastName: 'text',
+    email: 'text',
+    activationCode: 'text',
+})
 userSchema.plugin(mongoosePaginate)
 
 userSchema.methods.toJSON = function () {
