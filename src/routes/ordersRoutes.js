@@ -192,7 +192,6 @@ router.post('/', auth.authHandler, async (req, res) => {
         const order = await ordersCases.createOrder(sub, orderItems, shippingAddressId);
         res.status(201).json(order);
     } catch (error) {
-        console.log(error);
         if (HTTPError.isHttpError(error)) {
             return res.status(error.statusCode).json({ message: error.message });
         }
