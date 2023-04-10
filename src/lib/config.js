@@ -11,6 +11,8 @@ const {
     APP_TAX_RATE,
     SENDGRID_API_KEY,
     SENDGRID_SENDER,
+    STRIPE_PRIVATE_API_KEY,
+    STRIPE_PUBLIC_API_KEY
 } = process.env
 
 const config = {
@@ -21,6 +23,7 @@ const config = {
         cloudinary_url: CLOUDINARY_URL,
         host: APP_HOST,
         taxRate: APP_TAX_RATE,
+
     },
     db: {
         user: APP_DB_USER,
@@ -32,6 +35,10 @@ const config = {
         apiKey: SENDGRID_API_KEY,
         sender: SENDGRID_SENDER,
     },
+    stripe: {
+        privateApiKey: STRIPE_PRIVATE_API_KEY,
+        publicApiKey: STRIPE_PUBLIC_API_KEY
+    }
 }
 
 module.exports = config
