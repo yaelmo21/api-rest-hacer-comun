@@ -1,4 +1,4 @@
-const { HTTPError, jwt, cryptography, mail } = require('../../lib')
+const { HTTPError, jwt, cryptography, mail, pay } = require('../../lib')
 const { User, Roles } = require('../../models')
 const { app } = require('../../lib').config
 
@@ -116,7 +116,9 @@ const activate = async (activationCode) => {
     const user = await User.findOne({ activationCode })
     if (!user) throw new HTTPError(404, 'Invalid activation code')
     if (user.isActive) throw new HTTPError(400, 'Activation code has expired')
-    user.isActive = true
+    const customer = await pay.createCustomer(user.email, `${user.firstName} ${user.lastName}`);
+    user.isActive = true;
+    user.billingId = customer.id;
     return await user.save()
 }
 
