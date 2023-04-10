@@ -349,7 +349,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *     - orders
  *     security:
  *       - bearerAuth: []
- *     description: Get Order
+ *     description: Update order
  *     parameters:
  *      - in: path
  *        name: id
@@ -407,6 +407,68 @@ router.patch('/:id', auth.authAdminHandler, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /orders/:id/pay:
+ *   post:
+ *     tags:
+ *     - orders
+ *     security:
+ *       - bearerAuth: []
+ *     description: Pay Order
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        description: Mongo ID or Slug
+ *     responses:
+ *       201:
+ *         description: Success Response.
+ *         schema:
+ *           type: object
+ *           properties: 
+ *             ok: 
+ *               type: boolean
+ *             urlPay: 
+ *               type: string
+ *           
+ *       401:
+ *         description: unauthorized.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       404:
+ *         description: Not found.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *       500:
+ *         description: internal server error.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ */
+router.post('/:id/pay', auth.authHandler, async (req, res) => {
+    try {
+        const { sub } = req.params.token;
+        const { id } = req.params;
+        const urlPay = await ordersCases.createSessionPay(sub, id);
+        res.json({ ok: true, urlPay })
+    } catch (error) {
+        if (HTTPError.isHttpError(error)) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
+        return res.status(500).json({
+            message: 'Internal Server Error, contact Support'
+        });
+    }
+
+});
 
 
 
