@@ -24,7 +24,8 @@ const orderSchema = new Schema({
             required: true
         },
         title: { type: String, required: true },
-        size: { type: String, required: true },
+        size: { type: String, },
+        color: { type: String },
         quantity: { type: Number, required: true },
         description: { type: String, required: true },
         slug: { type: String, required: true },

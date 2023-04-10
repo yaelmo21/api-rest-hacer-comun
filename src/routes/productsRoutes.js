@@ -27,6 +27,10 @@ const { HTTPError } = require('../lib');
  *         type: array
  *         items: 
  *           type: string
+ *       colors: 
+ *         type: array
+ *         items: 
+ *           type: string
  *       slug: 
  *         type: string
  *       tags: 
@@ -66,6 +70,7 @@ const { HTTPError } = require('../lib');
  *       images: 
  *         type: array
  *         items: 
+ *           type: string  
  *       inStock: 
  *         type: number
  *       price: 
@@ -73,6 +78,10 @@ const { HTTPError } = require('../lib');
  *       isActive: 
  *         type: boolean
  *       sizes: 
+ *         type: array
+ *         items: 
+ *           type: string
+ *       colors: 
  *         type: array
  *         items: 
  *           type: string
@@ -374,6 +383,8 @@ router.post('/:id/image', auth.authAdminHandler, async (req, resp) => {
  *   put:
  *     tags:
  *     - products
+ *     security:
+ *       - bearerAuth: []
  *     description: Create Product
  *     parameters:
  *      - in: path
@@ -445,6 +456,8 @@ router.put('/:id', auth.authAdminHandler, async (req, resp) => {
  *   delete:
  *     tags:
  *     - products
+ *     security:
+ *       - bearerAuth: []
  *     description: Create Product
  *     parameters:
  *      - in: path

@@ -45,6 +45,7 @@ const initialData = {
             price: 300,
             isActive: true,
             sizes: ['small', 'medium'],
+            colors: ['red', 'black', 'orange'],
             tags: ['jarro', 'negro', 'oaxaca'],
             images: [
                 'https://mexicorutamagica.mx/wp-content/uploads/2020/11/museodeartepopular_valle_123295357_366546204581943_4314429298067730236_n-copia.jpg',
@@ -60,6 +61,7 @@ const initialData = {
             price: 250,
             isActive: true,
             sizes: ['small', 'medium'],
+            colors: ['red', 'black'],
             tags: ['Alebrijes', 'figuras'],
             images: [
                 'https://mymodernmet.com/wp/wp-content/uploads/2019/05/Alebrijes-1-e1558455347541.jpg',
@@ -74,6 +76,7 @@ const initialData = {
             price: 350,
             isActive: true,
             sizes: ['small', 'medium', 'large'],
+            colors: ['white', 'black'],
             tags: ['piñata', 'estrella'],
             images: [
                 'https://www.turismomexico.es/wp-content/uploads/2019/01/pinata_mexicana.jpg',

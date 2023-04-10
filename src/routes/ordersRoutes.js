@@ -21,6 +21,8 @@ const { HTTPError } = require('../lib');
  *               type: string
  *             size: 
  *               type: string
+ *             color: 
+ *               type: string
  *             quantity: 
  *               type: integer
  *               format: int32
@@ -112,6 +114,8 @@ const { HTTPError } = require('../lib');
  *            quantity: 
  *              type: number
  *            size: 
+ *              type: string
+ *            color: 
  *              type: string
  *      shippingAddressId: 
  *        type: string
@@ -285,6 +289,8 @@ router.get('/', auth.authHandler, async (req, res) => {
  *   get:
  *     tags:
  *     - orders
+ *     security:
+ *       - bearerAuth: []
  *     description: Get Order
  *     parameters:
  *      - in: path
@@ -338,9 +344,11 @@ router.get('/:id', auth.authHandler, async (req, res) => {
 /**
  * @swagger
  * /orders/:id:
- *   put:
+ *   patch:
  *     tags:
  *     - orders
+ *     security:
+ *       - bearerAuth: []
  *     description: Get Order
  *     parameters:
  *      - in: path
@@ -380,7 +388,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *             message:
  *               type: string
  */
-router.put('/:id', auth.authAdminHandler, async (req, res) => {
+router.patch('/:id', auth.authAdminHandler, async (req, res) => {
     try {
         const { id } = req.params;
         const { state, comments, carrierInformation } = req.body

@@ -154,6 +154,8 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
  *   get:
  *     tags:
  *     - users
+ *     security:
+ *       - bearerAuth: []
  *     description: Get data of one user
  *     parameters:
  *      - in: path
@@ -207,6 +209,8 @@ router.get('/:id', auth.authHandler, async (req, res) => {
  *   post:
  *     tags:
  *     - users
+ *     security:
+ *       - bearerAuth: []
  *     description: Create a new user with client role,
  *     parameters:
  *      - in: body

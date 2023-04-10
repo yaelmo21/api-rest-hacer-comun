@@ -12,16 +12,26 @@ const formatProducts = (products, orderItems) => {
             quantity: item.quantity,
             size: item.size,
             image: productDb.images[0],
-            validSize: productDb.sizes.includes(item.size)
+            color: item.color,
+            validSize: productDb.sizes.includes(item.size),
+            validColor: productDb.colors.includes(item.color)
         }
     });
     const productsNotSize = orderItemsFormat.filter((item) => !item.validSize);
+    const productsNotColor = orderItemsFormat.filter((item) => !item.validColor);
     if (productsNotSize.length > 0) {
         const sizes = productsNotSize.map(({ size }) => size).join(', ')
-        throw new HTTPError(400, `${sizes} is not valid`);
+        throw new HTTPError(400, `${sizes} is not valid size`);
     }
+
+    if (productsNotColor.length > 0) {
+        const colors = productsNotColor.map(({ color }) => color).join(', ')
+        throw new HTTPError(400, `${colors} is not valid color`);
+    }
+
     return orderItemsFormat.map((item) => {
         delete item.validSize;
+        delete item.color;
         return item;
     })
 }
@@ -98,6 +108,7 @@ const createOrder = async (userId, orderItems, shippingAddressId) => {
         sizes: 1,
         image: 1,
         price: 1,
+        colors: 1,
     }).lean();
     const shippingAddressSearch = ShippingAddress.findById(shippingAddressId).
         select({
