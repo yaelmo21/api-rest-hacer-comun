@@ -42,6 +42,9 @@ const userSchema = new Schema(
             unique: true,
             default: randomUUID(),
         },
+        billingId: {
+            type: String
+        },
     },
     {
         timestamps: true,
