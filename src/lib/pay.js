@@ -37,9 +37,17 @@ const createPay = async (orderItems, billingId) => {
         url: session.url,
     };
 }
-stripe.checkout.session
+
+const createSessionCustomer = async (billingId, url) => {
+    const portalSession = await stripe.billingPortal.sessions.create({
+        customer: billingId,
+        return_url: url,
+    });
+    return portalSession;
+}
 
 module.exports = {
     createCustomer,
-    createPay
+    createPay,
+    createSessionCustomer
 }
