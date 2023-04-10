@@ -21,19 +21,21 @@ Para utilizar las variables de entorno solo se debe renombrar el archivo **.env.
 
 Las variables utilizadas son las siguientes:
 
-| Variable                    | Descripción                                                                                                                                                                   |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| APP_PORT                    | Puerto escucha del servidor express                                                                                                                                           |
-| APP_DB_USER                 | Usuario de base de datos (MongoDb)                                                                                                                                            |
-| APP_DB_PASSWORD             | Contraseña del usuario de base de datos (MongoDb)                                                                                                                             |
-| APP_DB_HOST                 | Nombre de dominio o dirección ip del servidor de base de datos (Mongodb)                                                                                                      |
-| APP_DB_NAME                 | Nombre de la base de datos (Mongodb)                                                                                                                                          |
-| APP_SECRET                  | Clave o semilla para cifrar los JWT                                                                                                                                           |
-| APP_HOST                    | Url del Api Rest                                                                                                                                                              |
-| APP_TAX_RATE                | Tasa de impuesto de la orden                                                                                                                                                  |
-| CLOUDINARY_URL              | Crendenciales de [Cloudinary](https://cloudinary.com)                                                                                                                         |
-| SENDGRID_API_KEY            | Crendenciales de [SendGrid](https://sendgrid.com)                                                                                                                         |
-| SENDGRID_SENDER             | Sender verificado de [SendGrid](https://sendgrid.com)                                                                                                                         |
+| Variable                         | Descripción                                                                                                                                                                   |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| APP_PORT                         | Puerto escucha del servidor express                                                                                                                                           |
+| APP_DB_USER                      | Usuario de base de datos (MongoDb)                                                                                                                                            |
+| APP_DB_PASSWORD                  | Contraseña del usuario de base de datos (MongoDb)                                                                                                                             |
+| APP_DB_HOST                      | Nombre de dominio o dirección ip del servidor de base de datos (Mongodb)                                                                                                      |
+| APP_DB_NAME                      | Nombre de la base de datos (Mongodb)                                                                                                                                          |
+| APP_SECRET                       | Clave o semilla para cifrar los JWT                                                                                                                                           |
+| APP_HOST                         | Url del Api Rest                                                                                                                                                              |
+| APP_TAX_RATE                     | Tasa de impuesto de la orden                                                                                                                                                  |
+| CLOUDINARY_URL                   | Crendenciales de [Cloudinary](https://cloudinary.com)                                                                                                                         |
+| SENDGRID_API_KEY                 | Crendenciales de [SendGrid](https://sendgrid.com)                                                                                                                             |
+| SENDGRID_SENDER                  | Sender verificado de [SendGrid](https://sendgrid.com)                                                                                                                         |
+| STRIPE_PRIVATE_API_KEY           | Llave privada para pagos con [Stripe](https://stripe.com/mx)                                                                                                                  |
+| STRIPE_PUBLIC_API_KEY            | Llave pública para pagos con [Stripe](https://stripe.com/mx)                                                                                                                  |
 
 ## Comandos del servidor
 
