@@ -42,6 +42,9 @@ const userSchema = new Schema(
             unique: true,
             default: randomUUID(),
         },
+        billingId: {
+            type: String
+        },
     },
     {
         timestamps: true,
@@ -52,8 +55,8 @@ userSchema.index({
     lastName: 'text',
     email: 'text',
     activationCode: 'text',
-})
-userSchema.plugin(mongoosePaginate)
+});
+userSchema.plugin(mongoosePaginate);
 
 userSchema.methods.toJSON = function () {
     let user = this
@@ -62,5 +65,5 @@ userSchema.methods.toJSON = function () {
     return userObj
 }
 
-const User = mongoose.models.User || model('User', userSchema)
+const User = mongoose.models.User || model('User', userSchema);
 module.exports = { User, Roles }

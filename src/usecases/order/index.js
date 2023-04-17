@@ -1,4 +1,4 @@
-const { HTTPError, config, mail } = require('../../lib');
+const { HTTPError, config, mail, pay } = require('../../lib');
 const { Order, Product, ShippingAddress, User, Roles, statusOrder } = require('../../models');
 
 const formatProducts = (products, orderItems) => {
@@ -222,9 +222,23 @@ const updateOrder = async (orderId, state, comments = '', carrierInformation = {
 }
 
 
+const createSessionPay = async (userId, orderId) => {
+    const orderDb = await Order.findOne({ _id: orderId, user: userId }).populate('user');
+    if (!orderDb) throw new HTTPError(404, 'Order not found');
+    if (orderDb.isPaid) throw new HTTPError(409, 'Order has was paid');
+    const user = orderDb.user;
+    if (!user.billingId) throw new HTTPError(409, 'the user does not have a billing ID');
+    const { url, id } = await pay.createPay(orderDb.orderItems, user.billingId);
+    orderDb.transactionId = id;
+    await orderDb.save();
+    return url;
+}
+
+
 module.exports = {
     createOrder,
     getOrders,
     getOrderById,
-    updateOrder
+    updateOrder,
+    createSessionPay
 }
