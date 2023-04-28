@@ -12,7 +12,8 @@ const {
     SENDGRID_API_KEY,
     SENDGRID_SENDER,
     STRIPE_PRIVATE_API_KEY,
-    STRIPE_PUBLIC_API_KEY
+    STRIPE_PUBLIC_API_KEY,
+    STRIPE_ENDPOINT_SECRET
 } = process.env
 
 const config = {
@@ -37,7 +38,8 @@ const config = {
     },
     stripe: {
         privateApiKey: STRIPE_PRIVATE_API_KEY,
-        publicApiKey: STRIPE_PUBLIC_API_KEY
+        publicApiKey: STRIPE_PUBLIC_API_KEY,
+        endpointSecret: STRIPE_ENDPOINT_SECRET
     }
 }
 
