@@ -45,9 +45,13 @@ const createSessionCustomer = async (billingId, url) => {
     });
     return portalSession;
 }
+const webhookEvent = (body, signature) => {
+    return stripe.webhooks.constructEvent(request.body, signature, config.stripe.endpointSecret);
+}
 
 module.exports = {
     createCustomer,
     createPay,
-    createSessionCustomer
+    createSessionCustomer,
+    webhookEvent
 }
