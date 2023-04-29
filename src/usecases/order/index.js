@@ -243,7 +243,6 @@ const createSessionPay = async (userId, orderId) => {
 }
 
 const updatePayOrder = async (transactionId) => {
-    console.log(transactionId)
     const orderUpdate = await Order.findOneAndUpdate({
         transactionId
     }, {
