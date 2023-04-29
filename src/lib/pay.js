@@ -45,13 +45,18 @@ const createSessionCustomer = async (billingId, url) => {
     });
     return portalSession;
 }
+
+const retriveSessionCustomer = async (id) => stripe.checkout.sessions.retrieve(id);
+
+
 const webhookEvent = (body, signature) => {
-    return stripe.webhooks.constructEvent(request.body, signature, config.stripe.endpointSecret);
+    return stripe.webhooks.constructEvent(body, signature, config.stripe.endpointSecret);
 }
 
 module.exports = {
     createCustomer,
     createPay,
     createSessionCustomer,
-    webhookEvent
+    webhookEvent,
+    retriveSessionCustomer
 }
