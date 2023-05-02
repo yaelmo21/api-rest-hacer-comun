@@ -328,7 +328,7 @@ router.get('/:id', auth.authHandler, async (req, res) => {
     try {
         const { sub } = req.params.token;
         const { id } = req.params;
-        const order = await ordersCases.getOrderById(sub, id);
+        const order = await ordersCases.getOrderByIdAndUser(sub, id);
         res.status(200).json(order);
     } catch (error) {
         if (HTTPError.isHttpError(error)) {

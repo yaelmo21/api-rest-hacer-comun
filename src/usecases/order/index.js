@@ -129,7 +129,7 @@ const createOrder = async (userId, orderItems, shippingAddressId) => {
     if (countNotFoundProducts > 0) throw new HTTPError(400, `${countNotFoundProducts} ${countNotFoundProducts > 1 ? 'products' : 'product'} has been found`);
     if (!shippingAddress) throw new HTTPError(400, 'Shipping Address not found');
     const orderItemsFormat = formatProducts(products, orderItems);
-    const total = products.reduce((acc, current) => acc + current.price, 0);
+    const total = orderItemsFormat.reduce((acc, current) => acc + (current.price * current.quantity), 0);
     const taxAmount = total * config.app.taxRate;
     const subTotal = total - taxAmount;
     const newOrder = {
@@ -182,6 +182,12 @@ const getOrders = async (userId, page = 1, limit = 10, termSearch) => {
 }
 
 const getOrderById = async (userId, orderId) => {
+    const order = await Order.findById(query);
+    if (!order) throw new HTTPError(404, 'Order not found');
+    return order;
+}
+
+const getOrderByIdAndUser = async (userId, orderId) => {
     const userDb = await User.findById(userId).lean();
     if (!userDb) throw new HTTPError(404, 'User not found');
     const query = userDb.role !== Roles.admin ? { _id: orderId, user: userId } : { _id: orderId };
@@ -189,6 +195,8 @@ const getOrderById = async (userId, orderId) => {
     if (!order) throw new HTTPError(404, 'Order not found');
     return order;
 }
+
+
 
 const updateOrder = async (orderId, state, comments = '', carrierInformation = {}) => {
     if (state && !Object.values(statusOrder).includes(state)) {
@@ -234,11 +242,27 @@ const createSessionPay = async (userId, orderId) => {
     return url;
 }
 
+const updatePayOrder = async (transactionId) => {
+    const orderUpdate = await Order.findOneAndUpdate({
+        transactionId
+    }, {
+        isPaid: true,
+        paidAt: new Date(),
+        state: statusOrder.preparing
+    }, {
+        new: true,
+    });
+    if (!orderUpdate) throw new HTTPError(404, 'Order not found');
+    return 'Update Success';
+}
+
 
 module.exports = {
     createOrder,
     getOrders,
     getOrderById,
     updateOrder,
-    createSessionPay
+    createSessionPay,
+    getOrderByIdAndUser,
+    updatePayOrder
 }
