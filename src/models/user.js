@@ -1,8 +1,8 @@
-const { randomUUID } = require('crypto')
-const mongoose = require('mongoose')
-const { Schema, model } = mongoose
-const mongoosePaginate = require('mongoose-paginate-v2')
-const { config } = require('../lib')
+const { randomUUID } = require('crypto');
+const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
+const mongoosePaginate = require('mongoose-paginate-v2');
+const { config } = require('../lib');
 
 const Roles = {
     admin: 'admin',
