@@ -8,8 +8,7 @@ const getToken = (req) => {
 }
 
 const authClientHandler = async (req, res, next) => {
-    const { authorization = '' } = req.headers
-    const token = authorization.split(' ')[1]
+    const token = getToken(req);
     try {
         req.params.token = verifyToken(token)
         next()
@@ -21,9 +20,9 @@ const authClientHandler = async (req, res, next) => {
 
 const authAdminHandler = async (req, res, next) => {
     try {
-        const token = getToken(req)
-        const userDataToken = verifyToken(token)
-        const userDb = await User.findById(userDataToken.sub)
+        const token = getToken(req);
+        const userDataToken = verifyToken(token);
+        const userDb = await User.findById(userDataToken.sub);
         if (!userDb)
             return res
                 .status(401)

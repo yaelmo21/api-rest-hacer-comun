@@ -22,8 +22,10 @@ const getAll = async (page = 1, limit = 10, termSearch) => {
 }
 
 const getById = async (id) => {
-    const select = { firstName: 1, lastName: 1, email: 1, isActive: 1 }
-    return await User.findById(id, select)
+    const select = { firstName: 1, lastName: 1, email: 1, isActive: 1 };
+    const user = await User.findById(id, select);
+    if (!user) throw new HTTPError(404, 'User not found, please create account');
+    return user;
 }
 
 const update = async (id, firstName, lastName, email, role) => {

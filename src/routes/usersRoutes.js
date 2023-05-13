@@ -182,7 +182,7 @@ router.get('/', auth.authAdminHandler, async (req, res) => {
  *             message:
  *               type: string
  */
-router.get('/:id', auth.authHandler, async (req, res) => {
+router.get('/:id', auth.authAdminHandler, async (req, res) => {
     try {
         const { id } = req.params
         const { sub, role } = req.params.token
@@ -358,7 +358,7 @@ router.post('/auth', async (req, res) => {
 
 /**
  * @swagger
- * /users/validate-token:
+ * /users/auth/validate-token:
  *   get:
  *     security:
  *      - bearerAuth: []
@@ -404,7 +404,7 @@ router.post('/auth', async (req, res) => {
  *             message:
  *               type: string
  */
-router.get('/validate-token', auth.authClientHandler, async (req, res) => {
+router.get('/auth/validate-token', auth.authClientHandler, async (req, res) => {
     try {
         const { sub } = req.params.token
         const result = await usersCases.renewTokenInfo(sub)
