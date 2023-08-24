@@ -1,0 +1,6 @@
+docker/
+node_modules/
+.git/
+.github/
+*.env
+!docker/docker-entrypoint.sh
