@@ -1,0 +1,40 @@
+name: Docker Image CI
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    docker-build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Extract Docker metadata
+              id: meta
+              uses: docker/metadata-action@v4
+              with:
+                  images: ghcr.io/${{ github.repository }}
+                  tags: |
+                      type=schedule,pattern={{date 'YYYYMMDD'}}
+                  flavor: |
+                      latest=true
+
+            - name: Login to Github registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ github.token }}
+
+            - name: Build and push the Docker image
+              uses: docker/build-push-action@v4
+              with:
+                  push: true
+                  context: .
+                  file: ./docker/Dockerfile
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}

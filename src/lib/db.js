@@ -5,8 +5,10 @@ const connect = () => {
     return new Promise(async (resolve, reject) => {
         const { user, password, host, name } = config.db;
         mongoose.connect(
-            `mongodb+srv://${user}:${password}@${host}/${name}?retryWrites=true&w=majority`
-        );
+            `mongodb://${user}:${password}@${host}/${name}`, {
+                authSource: "admin"
+            }
+        )
 
         const db = mongoose.connection;
 
